@@ -1,0 +1,27 @@
+<resources>
+    <string name="app_name">PauseApp</string>
+    <string name="pauseapp_mayus">PAUSEAPP</string>
+    <string name="log_in">Iniciar Sesión</string>
+    <string name="register">Registro</string>
+    <string name="home">Home</string>
+    <string name="actividades">Actividades</string>
+    <string name="perfil">Perfil</string>
+    <string name="username">Nombre de usuario</string>
+    <string name="mail">Correo electrónico</string>
+    <string name="password">Contraseña</string>
+    <string name="repeat_paswd">Repetir contraseña</string>
+    <string name="no_tienes_cuenta">No tienes cuenta?</string>
+    <string name="registrate">REGÍSTRATE</string>
+    <string name="cuenta">Cuenta</string>
+    <string name="preferencias">Preferencias</string>
+    <string name="notificaciones">Notificaciones</string>
+    <string name="ajustes_de_privacidad">Ajustes de privacidad</string>
+    <string name="soporte">Soporte</string>
+    <string name="ok">OK</string>
+    <string name="centro_de_ayuda">Centro de Ayuda</string>
+    <string name="sugerencias">Sugerencias</string>
+    <string name="salir">Salir</string>
+    <string name="dias_usando_pauseapp">Dias usando PauseApp</string>
+    <string name="actividades_realizadas">Actividades realizadas</string>
+    <string name="buscar">Buscar...</string>
+</resources>

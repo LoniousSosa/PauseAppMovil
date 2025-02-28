@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ConfigurationActivity"
+    android:background="@color/general_background"
+    >
+
+    <!--
+
+    Boton sticky OK
+
+    !-->
+
+    <Button
+        android:id="@+id/okButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toEndOf="@id/preferenciasButton"
+        style="@style/ButtonOne"
+        android:text="@string/ok"
+        android:textSize="15sp"
+        android:padding="20dp"
+        android:layout_marginTop="30dp"/>
+
+    <TextView
+        android:id="@+id/cuentaTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/cuenta"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        android:layout_marginTop="120dp"
+        android:textSize="24sp"
+        android:layout_marginStart="60dp"
+        />
+
+    <Button
+        android:layout_marginTop="20dp"
+        android:textSize="17sp"
+        android:id="@+id/preferenciasButton"
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
+        style="@style/ConfigurationButton"
+        android:text="@string/preferencias"
+        app:layout_constraintTop_toBottomOf="@id/cuentaTextView"
+        app:layout_constraintStart_toStartOf="@id/cuentaTextView"/>
+
+    <Button
+        android:textSize="17sp"
+        android:id="@+id/perfilButton"
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
+        style="@style/ConfigurationButton"
+        android:text="@string/perfil"
+        app:layout_constraintTop_toBottomOf="@id/preferenciasButton"
+        app:layout_constraintStart_toStartOf="@id/preferenciasButton"/>
+
+    <Button
+        android:textSize="17sp"
+        android:id="@+id/notiButton"
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
+        style="@style/ConfigurationButton"
+        android:text="@string/notificaciones"
+        app:layout_constraintTop_toBottomOf="@id/perfilButton"
+        app:layout_constraintStart_toStartOf="@id/preferenciasButton"/>
+
+    <Button
+        android:textSize="17sp"
+        android:id="@+id/privacidadButton"
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
+        style="@style/ConfigurationButton"
+        android:text="@string/ajustes_de_privacidad"
+        app:layout_constraintTop_toBottomOf="@id/notiButton"
+        app:layout_constraintStart_toStartOf="@id/preferenciasButton"/>
+
+    <TextView
+        android:id="@+id/soporteTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/soporte"
+        app:layout_constraintTop_toTopOf="@id/privacidadButton"
+        app:layout_constraintStart_toStartOf="@id/cuentaTextView"
+        android:layout_marginTop="120dp"
+        android:textSize="24sp"
+        />
+
+    <Button
+        android:layout_marginTop="20dp"
+        android:textSize="17sp"
+        android:id="@+id/centroAyudaButton"
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
+        style="@style/ConfigurationButton"
+        android:text="@string/centro_de_ayuda"
+        app:layout_constraintTop_toBottomOf="@id/soporteTextView"
+        app:layout_constraintStart_toStartOf="@id/soporteTextView"/>
+
+    <Button
+        android:textSize="17sp"
+        android:id="@+id/sugerenciasButton"
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
+        style="@style/ConfigurationButton"
+        android:text="@string/sugerencias"
+        app:layout_constraintTop_toBottomOf="@id/centroAyudaButton"
+        app:layout_constraintStart_toStartOf="@id/soporteTextView"/>
+
+
+    <!--
+
+        Boton sticky de salir
+
+    !-->
+
+    <Button
+        android:layout_width="240dp"
+        android:layout_height="wrap_content"
+        android:padding="30dp"
+        android:layout_marginBottom="100dp"
+        style="@style/ButtonOne"
+        android:text="@string/salir"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        />
+</androidx.constraintlayout.widget.ConstraintLayout>

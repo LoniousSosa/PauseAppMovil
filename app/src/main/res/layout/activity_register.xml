@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/general_background"
+    tools:context=".RegisterActivity">
+    
+    <TextView
+        android:id="@+id/userName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        android:layout_marginTop="120dp"
+        android:layout_marginStart="70dp"
+        android:text="@string/username"
+        android:textSize="20sp"
+        />
+
+    <EditText
+        android:layout_width="270dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:padding="15dp"
+        android:background="@color/imagebutton_background"
+        android:id="@+id/userNameEdit"
+        android:hint="@string/username"
+        android:textColorHint="@color/white"
+        app:layout_constraintTop_toBottomOf="@id/userName"
+        app:layout_constraintStart_toStartOf="@id/userName"
+        />
+
+    <TextView
+        android:id="@+id/mail"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/userNameEdit"
+        app:layout_constraintStart_toStartOf="parent"
+        android:layout_marginTop="45dp"
+        android:layout_marginStart="70dp"
+        android:text="@string/mail"
+        android:textSize="20sp"
+        />
+
+    <EditText
+        android:layout_width="270dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:padding="15dp"
+        android:background="@color/imagebutton_background"
+        android:id="@+id/mailEdit"
+        android:hint="@string/mail"
+        android:textColorHint="@color/white"
+        app:layout_constraintTop_toBottomOf="@id/mail"
+        app:layout_constraintStart_toStartOf="@id/mail"
+        />
+
+    <TextView
+        android:id="@+id/password"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/mailEdit"
+        app:layout_constraintStart_toStartOf="parent"
+        android:layout_marginTop="45dp"
+        android:layout_marginStart="70dp"
+        android:text="@string/password"
+        android:textSize="20sp"
+        />
+
+    <EditText
+        android:layout_width="270dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:padding="15dp"
+        android:background="@color/imagebutton_background"
+        android:id="@+id/passwordEdit"
+        android:hint="@string/password"
+        android:textColorHint="@color/white"
+        app:layout_constraintTop_toBottomOf="@id/password"
+        app:layout_constraintStart_toStartOf="@id/password"
+        />
+
+    <TextView
+        android:id="@+id/repeat"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/passwordEdit"
+        app:layout_constraintStart_toStartOf="parent"
+        android:layout_marginTop="45dp"
+        android:layout_marginStart="70dp"
+        android:text="@string/repeat_paswd"
+        android:textSize="20sp"
+        />
+
+    <EditText
+        android:layout_width="270dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:padding="15dp"
+        android:background="@color/imagebutton_background"
+        android:id="@+id/repeatEdit"
+        android:hint="@string/repeat_paswd"
+        android:textColorHint="@color/white"
+        app:layout_constraintTop_toBottomOf="@id/repeat"
+        app:layout_constraintStart_toStartOf="@id/repeat"
+        />
+
+    <Button
+        android:id="@+id/registerButton"
+        android:layout_width="270dp"
+        android:layout_height="wrap_content"
+        android:padding="20dp"
+        app:layout_constraintTop_toBottomOf="@id/repeatEdit"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="60dp"
+        style="@style/ButtonOne"
+        android:text="@string/register"/>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
