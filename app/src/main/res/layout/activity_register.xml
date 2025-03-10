@@ -29,6 +29,7 @@
         android:id="@+id/userNameEdit"
         android:hint="@string/username"
         android:textColorHint="@color/white"
+        android:textColor="@color/white"
         app:layout_constraintTop_toBottomOf="@id/userName"
         app:layout_constraintStart_toStartOf="@id/userName"
         />
@@ -54,6 +55,7 @@
         android:id="@+id/mailEdit"
         android:hint="@string/mail"
         android:textColorHint="@color/white"
+        android:textColor="@color/white"
         app:layout_constraintTop_toBottomOf="@id/mail"
         app:layout_constraintStart_toStartOf="@id/mail"
         />
@@ -79,6 +81,7 @@
         android:id="@+id/passwordEdit"
         android:hint="@string/password"
         android:textColorHint="@color/white"
+        android:textColor="@color/white"
         app:layout_constraintTop_toBottomOf="@id/password"
         app:layout_constraintStart_toStartOf="@id/password"
         />
@@ -104,6 +107,7 @@
         android:id="@+id/repeatEdit"
         android:hint="@string/repeat_paswd"
         android:textColorHint="@color/white"
+        android:textColor="@color/white"
         app:layout_constraintTop_toBottomOf="@id/repeat"
         app:layout_constraintStart_toStartOf="@id/repeat"
         />

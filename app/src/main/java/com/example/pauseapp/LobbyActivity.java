@@ -2,8 +2,11 @@ package com.example.pauseapp;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.View;
 import android.widget.ImageButton;
+import android.widget.PopupMenu;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -13,8 +16,8 @@ import androidx.core.view.WindowInsetsCompat;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
-public class LobbyActivity extends AppCompatActivity {
-    ImageButton menuLateral, profileButton;
+public class LobbyActivity extends BaseActivity {
+    ImageButton menuLateral;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -23,17 +26,7 @@ public class LobbyActivity extends AppCompatActivity {
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottomNavigationView);
         bottomNavigationView.setItemBackgroundResource(R.drawable.bottom_nav_item_background);
 
-        menuLateral = findViewById(R.id.menuLateral);
-        profileButton = findViewById(R.id.profileButton);
-
-        menuLateral.setOnClickListener(view -> {
-            Intent intent = new Intent(LobbyActivity.this,ConfigurationActivity.class);
-            startActivity(intent);
-        });
-
-        profileButton.setOnClickListener(view -> {
-            Intent intent = new Intent(LobbyActivity.this,ProfileActivity.class);
-            startActivity(intent);
-        });
+        setupNavigation();
     }
+
 }

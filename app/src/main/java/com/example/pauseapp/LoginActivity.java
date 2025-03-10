@@ -20,7 +20,7 @@ public class LoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
-        loginButton = findViewById(R.id.loginButton);
+        loginButton = findViewById(R.id.logToLobby);
         registerSuggestionButton = findViewById(R.id.registerSuggestion);
 
         loginButton.setOnClickListener(view -> {

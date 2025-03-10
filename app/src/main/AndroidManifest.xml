@@ -13,6 +13,12 @@
         android:theme="@style/Theme.PauseApp"
         tools:targetApi="31">
         <activity
+            android:name=".FriendProfileActivity"
+            android:exported="false" />
+        <activity
+            android:name=".FriendsActivity"
+            android:exported="false" />
+        <activity
             android:name=".ActivitiesListActivity"
             android:exported="false" />
         <activity

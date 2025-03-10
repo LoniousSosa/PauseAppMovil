@@ -15,7 +15,7 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
-public class ProfileActivity extends AppCompatActivity {
+public class ProfileActivity extends BaseActivity {
 
     private ProgressBar stressBarCurrent, stressBarPrevious;
     private ImageView stressIconCurrent, stressIconPrevious;
@@ -24,6 +24,9 @@ public class ProfileActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
+        setupNavigation();
+
+
         stressBarCurrent = findViewById(R.id.stressBarActual);
         stressIconCurrent = findViewById(R.id.actualStressIcon);
         stressBarPrevious = findViewById(R.id.stressBarAnterior);

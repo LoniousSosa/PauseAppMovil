@@ -24,4 +24,15 @@
     <string name="dias_usando_pauseapp">Dias usando PauseApp</string>
     <string name="actividades_realizadas">Actividades realizadas</string>
     <string name="buscar">Buscar...</string>
+    <string name="mindfulness">Mindfulness</string>
+    <string name="meditacion">Meditación</string>
+    <string name="ejercicio">Ejercicio</string>
+    <string name="introspeccion">Introspección</string>
+    <string name="nuevo_perfil">Nuevo perfil</string>
+    <string name="stress_level">Nivel de estrés</string>
+    <string name="diario">Diario</string>
+    <string name="mensual">Mensual</string>
+    <string name="trimestral">Trimestral</string>
+    <string name="configuracion">Configuracion</string>
+    <string name="friends">Amigos</string>
 </resources>
