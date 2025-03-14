@@ -13,6 +13,15 @@
         android:theme="@style/Theme.PauseApp"
         tools:targetApi="31">
         <activity
+            android:name=".NotificationConfigActivity"
+            android:exported="false" />
+        <activity
+            android:name=".PaymentActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ShopActivity"
+            android:exported="false" />
+        <activity
             android:name=".FriendProfileActivity"
             android:exported="false" />
         <activity

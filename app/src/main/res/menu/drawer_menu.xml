@@ -2,7 +2,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
         android:id="@+id/nav_home"
-        android:icon="@drawable/logo_definitivo"
+        android:icon="@drawable/home_lateral"
         android:title="@string/home"
         />
     <item
@@ -12,15 +12,15 @@
         />
     <item
         android:id="@+id/nav_friends"
-        android:icon="@drawable/profile_logo_menu"
+        android:icon="@drawable/friend_lateral"
         android:title="@string/friends"
         />
     <item android:id="@+id/nav_configuration"
-        android:icon="@drawable/profile_logo_menu"
+        android:icon="@drawable/config_lateral"
         android:title="@string/configuracion"
         />
     <item android:id="@+id/nav_out"
-        android:icon="@drawable/profile_logo_menu"
+        android:icon="@drawable/exit_lateral"
         android:title="@string/salir"
         />
 </menu>

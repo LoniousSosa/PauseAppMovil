@@ -22,18 +22,15 @@ public class BaseActivity extends AppCompatActivity {
     }
 
     protected void setupNavigation() {
-        // Inicializar vistas
         drawerLayout = findViewById(R.id.drawerLayout);
         navigationView = findViewById(R.id.navigationView);
         bottomNavigationView = findViewById(R.id.bottomNavigationView);
         menuLateralButton = findViewById(R.id.menuLateral);
 
-        // Configurar botón para abrir el menú lateral
         if (menuLateralButton != null) {
             menuLateralButton.setOnClickListener(v -> drawerLayout.openDrawer(navigationView));
         }
 
-        // Configurar acciones de los ítems del menú lateral
         if (navigationView != null) {
             navigationView.setNavigationItemSelectedListener(item -> {
                 int id = item.getItemId();
@@ -48,15 +45,14 @@ public class BaseActivity extends AppCompatActivity {
                     startActivity(new Intent(BaseActivity.this,ConfigurationActivity.class));
                     return true;
                 } else if (id == R.id.nav_out){
-                    //Fragment con confirmacion de si quiere salir
-
+                    LogoutConfirmationFragment logoutDialog = new LogoutConfirmationFragment();
+                    logoutDialog.show(getSupportFragmentManager(), "logoutDialog");
                 }
                 drawerLayout.closeDrawers();
                 return true;
             });
         }
 
-        // Configurar menú inferior
         if (bottomNavigationView != null) {
             bottomNavigationView.setOnItemSelectedListener(item -> {
                 int id = item.getItemId();
@@ -76,17 +72,14 @@ public class BaseActivity extends AppCompatActivity {
     }
 
     protected void setupNavigationNoBottom() {
-        // Inicializar vistas
         drawerLayout = findViewById(R.id.drawerLayout);
         navigationView = findViewById(R.id.navigationView);
         menuLateralButton = findViewById(R.id.menuLateral);
 
-        // Configurar botón para abrir el menú lateral
         if (menuLateralButton != null) {
             menuLateralButton.setOnClickListener(v -> drawerLayout.openDrawer(navigationView));
         }
 
-        // Configurar acciones de los ítems del menú lateral
         if (navigationView != null) {
             navigationView.setNavigationItemSelectedListener(item -> {
                 int id = item.getItemId();
@@ -101,7 +94,8 @@ public class BaseActivity extends AppCompatActivity {
                     startActivity(new Intent(BaseActivity.this,ConfigurationActivity.class));
                     return true;
                 } else if (id == R.id.nav_out){
-                    //Fragment con confirmacion de si quiere salir
+                    LogoutConfirmationFragment logoutDialog = new LogoutConfirmationFragment();
+                    logoutDialog.show(getSupportFragmentManager(), "logoutDialog");
                 }
                 drawerLayout.closeDrawers();
                 return true;

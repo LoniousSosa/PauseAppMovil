@@ -1,0 +1,265 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/general_background"
+    tools:context=".NotificationConfigActivity">
+
+    <Button
+        android:id="@+id/okButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginEnd="40dp"
+        style="@style/ButtonOne"
+        android:text="@string/ok"
+        android:textSize="15sp"
+        android:padding="20dp"
+        android:layout_marginTop="50dp"/>
+
+
+    <androidx.core.widget.NestedScrollView
+        android:id="@+id/nestedScrollView"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:layout_constraintTop_toBottomOf="@id/okButton"
+        app:layout_constraintBottom_toTopOf="@id/exitButtonNoti"
+        android:fillViewport="true">
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+
+        <TextView
+            android:id="@+id/selectString"
+            android:layout_width="240dp"
+            android:layout_height="wrap_content"
+            android:text="@string/configuraci_n_de_las_notificaciones"
+            android:textSize="24sp"
+            android:layout_marginTop="40dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"/>
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/statusButton"
+            android:layout_width="240dp"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@id/selectString"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            style="@style/TriangleButton"
+            android:background="@drawable/button_triangle"
+            android:text="@string/estado"
+            android:padding="16dp"
+            android:textSize="18sp"
+            android:layout_marginTop="60dp"/>
+
+        <LinearLayout
+            android:id="@+id/statusCheckBoxes"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:layout_constraintStart_toStartOf="@id/statusButton"
+            app:layout_constraintEnd_toEndOf="@id/statusButton"
+            app:layout_constraintTop_toBottomOf="@id/statusButton"
+            android:orientation="vertical"
+            android:layout_marginTop="20dp"
+            android:visibility="gone"
+            >
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:background="@color/imagebutton_background"
+                style="@style/ConfigurationButton"
+                android:padding="16dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/activadas"
+                    android:textColor="@android:color/white"
+                    android:textSize="18sp"
+                    android:layout_marginStart="20dp"/>
+
+                <CheckBox
+                    android:id="@+id/checkBoxActivas"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="40dp"
+                    android:button="@drawable/ic_checkbox_unchecked"
+                    android:buttonTint="@android:color/white"/>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:background="@color/imagebutton_background"
+                style="@style/ConfigurationButton"
+                android:layout_marginTop="20dp"
+                android:padding="16dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/desactivadas"
+                    android:textColor="@android:color/white"
+                    android:textSize="18sp"
+                    android:layout_marginStart="8dp"/>
+
+                <CheckBox
+                    android:id="@+id/checkBoxDesactivadas"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="20dp"
+                    android:button="@drawable/ic_checkbox_unchecked"
+                    android:buttonTint="@android:color/white"/>
+            </LinearLayout>
+        </LinearLayout>
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/modoNotificaciones"
+            android:layout_width="240dp"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@id/statusCheckBoxes"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            style="@style/TriangleButton"
+            android:background="@drawable/button_triangle"
+            android:text="@string/no_molestar"
+            android:padding="16dp"
+            android:textSize="18sp"
+            android:layout_marginTop="60dp"/>
+
+        <LinearLayout
+            android:id="@+id/noMolestarCheckboxes"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:layout_constraintStart_toStartOf="@id/modoNotificaciones"
+            app:layout_constraintEnd_toEndOf="@id/modoNotificaciones"
+            app:layout_constraintTop_toBottomOf="@id/modoNotificaciones"
+            android:orientation="vertical"
+            android:layout_marginTop="20dp"
+            android:visibility="gone"
+            >
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:background="@color/imagebutton_background"
+                style="@style/ConfigurationButton"
+                android:padding="16dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/activado"
+                    android:textColor="@android:color/white"
+                    android:textSize="18sp"
+                    android:layout_marginStart="20dp"/>
+
+                <CheckBox
+                    android:id="@+id/noMolestarActivo"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="40dp"
+                    android:button="@drawable/ic_checkbox_unchecked"
+                    android:buttonTint="@android:color/white"/>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:background="@color/imagebutton_background"
+                style="@style/ConfigurationButton"
+                android:layout_marginTop="20dp"
+                android:padding="16dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/desactivado"
+                    android:textColor="@android:color/white"
+                    android:textSize="18sp"
+                    android:layout_marginStart="8dp"/>
+
+                <CheckBox
+                    android:id="@+id/noMolestarDesactivado"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="20dp"
+                    android:button="@drawable/ic_checkbox_unchecked"
+                    android:buttonTint="@android:color/white"/>
+            </LinearLayout>
+        </LinearLayout>
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/intervalo"
+            android:layout_width="240dp"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@id/noMolestarCheckboxes"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            style="@style/TriangleButton"
+            android:background="@drawable/button_triangle"
+            android:text="@string/intervalo"
+            android:padding="16dp"
+            android:textSize="18sp"
+            android:layout_marginTop="60dp"/>
+
+        <LinearLayout
+            android:id="@+id/timerLayout"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@id/intervalo"
+            app:layout_constraintStart_toStartOf="@id/intervalo"
+            app:layout_constraintEnd_toEndOf="@id/intervalo"
+            android:orientation="vertical"
+            android:padding="15dp"
+            android:background="@drawable/border_shape"
+            android:backgroundTint="@color/imagebutton_background"
+            android:layout_marginTop="40dp"
+            android:gravity="center"
+            android:visibility="gone"
+            >
+
+            <TextView
+                android:id="@+id/timerText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="10dp"
+                android:text="@string/timerInterval"
+                android:textSize="23sp"
+                android:textColor="@android:color/black"
+                android:background="@android:color/white"
+                android:gravity="center"/>
+        </LinearLayout>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </androidx.core.widget.NestedScrollView>
+
+    <Button
+        android:id="@+id/exitButtonNoti"
+        android:layout_width="240dp"
+        android:layout_height="wrap_content"
+        android:padding="30dp"
+        android:layout_marginBottom="100dp"
+        style="@style/ButtonOne"
+        android:text="@string/salir"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

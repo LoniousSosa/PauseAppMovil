@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/general_background"
+    tools:context=".ShopActivity">
+
+    <TextView
+        android:id="@+id/fullDescription"
+        android:layout_width="190dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="30dp"
+        android:text="@string/suscripcion_descripcion"
+        android:textSize="18sp"
+        app:layout_constraintBottom_toTopOf="@id/bottomNavigationView"
+        app:layout_constraintEnd_toStartOf="@id/logoInShop"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.364" />
+
+    <ImageView
+        android:id="@+id/logoInShop"
+        android:layout_width="170dp"
+        android:layout_height="170dp"
+        android:layout_marginEnd="30dp"
+        android:paddingHorizontal="10dp"
+        android:src="@drawable/logo_definitivo"
+        app:layout_constraintTop_toTopOf="@id/fullDescription"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/fullDescription"
+        app:layout_constraintBottom_toBottomOf="@id/fullDescription"
+        />
+
+    <TextView
+        android:id="@+id/priceString"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/precio"
+        android:textSize="28sp"
+        app:layout_constraintStart_toStartOf="@id/fullDescription"
+        app:layout_constraintEnd_toEndOf="@id/fullDescription"
+        app:layout_constraintTop_toBottomOf="@id/fullDescription"
+        app:layout_constraintBottom_toTopOf="@id/buyButton"/>
+
+    <TextView
+        android:id="@+id/price"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/precio_a_pagar"
+        android:textSize="28sp"
+        app:layout_constraintStart_toStartOf="@id/logoInShop"
+        app:layout_constraintEnd_toEndOf="@id/logoInShop"
+        app:layout_constraintTop_toBottomOf="@id/fullDescription"
+        app:layout_constraintBottom_toTopOf="@id/buyButton"/>
+
+    <Button
+        android:id="@+id/buyButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="20sp"
+        android:textAllCaps="false"
+        style="@style/ButtonOne"
+        android:text="@string/comprar"
+        app:layout_constraintBottom_toTopOf="@id/bottomNavigationView"
+        app:layout_constraintTop_toBottomOf="@id/priceString"/>
+
+    <com.google.android.material.bottomnavigation.BottomNavigationView
+        android:id="@+id/bottomNavigationView"
+        android:layout_width="match_parent"
+        android:layout_height="140dp"
+        app:itemIconSize="40dp"
+        app:itemPaddingTop="30dp"
+        app:itemPaddingBottom="25dp"
+        app:itemTextAppearanceActive="@style/BottomNavText"
+        app:itemTextAppearanceInactive="@style/BottomNavText"
+        android:background="@color/imagebutton_background"
+        app:itemIconTint="@drawable/bottom_nav_icon_color"
+        app:itemTextColor="@drawable/bottom_nav_icon_color"
+        app:itemBackground="@drawable/bottom_nav_selected_background"
+        app:menu="@menu/bottom_nav_menu"
+        app:labelVisibilityMode="labeled"
+        app:layout_constraintBottom_toBottomOf="parent"/>
+</androidx.constraintlayout.widget.ConstraintLayout>

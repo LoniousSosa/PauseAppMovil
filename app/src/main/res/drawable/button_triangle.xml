@@ -1,0 +1,20 @@
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <item>
+        <shape android:shape="rectangle">
+            <solid android:color="@color/button_background" />
+            <corners android:radius="4dp" />
+        </shape>
+    </item>
+    <item android:right="30dp">
+        <rotate
+            android:fromDegrees="45"
+            android:pivotX="3%"
+            android:pivotY="10%">
+            <shape android:shape="rectangle">
+                <solid android:color="@color/general_background" />
+                <size android:width="20dp" android:height="20dp" />
+            </shape>
+        </rotate>
+    </item>
+</layer-list>
+

@@ -1,19 +1,14 @@
 package com.example.pauseapp;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
-import androidx.activity.EdgeToEdge;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
-
 public class ConfigurationActivity extends BaseActivity {
 
-    Button okButton,exitButtonConfiguration;
+    Button okButton,exitButtonConfiguration,notiButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -22,6 +17,7 @@ public class ConfigurationActivity extends BaseActivity {
 
         okButton = findViewById(R.id.okButton);
         exitButtonConfiguration = findViewById(R.id.exitButtonConfiguration);
+        notiButton = findViewById(R.id.notiButton);
 
         okButton.setOnClickListener(view -> {
             Toast.makeText(this,"Configuración actualizada con exito",
@@ -34,5 +30,10 @@ public class ConfigurationActivity extends BaseActivity {
             finish();
         });
         exitButtonConfiguration.setOnClickListener(view -> finish());
+
+        notiButton.setOnClickListener(view -> {
+            Intent intent = new Intent(ConfigurationActivity.this,NotificationConfigActivity.class);
+            startActivity(intent);
+        });
     }
 }
