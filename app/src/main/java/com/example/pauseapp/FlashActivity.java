@@ -34,6 +34,6 @@ public class FlashActivity extends AppCompatActivity {
             Intent intent = new Intent(FlashActivity.this, MainActivity.class);
             startActivity(intent);
             finish();
-        }, 4500);
+        }, 3500);
     }
 }
