@@ -73,4 +73,16 @@
     <string name="configuraci_n_de_las_notificaciones">Configuración de las notificaciones</string>
     <string name="desactivado">Desactivado</string>
     <string name="info">Información</string>
+    <string name="pospone">Posponer</string>
+    <string name="tiempo_en_la_actividad">Tiempo en la actividad</string>
+    <string name="tiempo">TIEMPO</string>
+    <string name="preferencias_del_usuario">Preferencias del usuario</string>
+    <string name="mensajes">Mensajes</string>
+    <string name="de_la_aplicacion">De la aplicación</string>
+    <string name="de_los_amigos">De los amigos</string>
+    <string name="sonido">Sonido</string>
+    <string name="musica_ambiental">Música ambiental</string>
+    <string name="audios">Audios</string>
+    <string name="respuesta">Respuesta</string>
+    <string name="mensajes_motivacionales">Mensajes motivacionales</string>
 </resources>

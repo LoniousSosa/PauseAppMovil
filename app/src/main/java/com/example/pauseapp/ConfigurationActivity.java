@@ -8,7 +8,7 @@ import android.widget.Toast;
 
 public class ConfigurationActivity extends BaseActivity {
 
-    Button okButton,exitButtonConfiguration,notiButton;
+    Button okButton,exitButtonConfiguration,notiButton,preferenciasButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -18,6 +18,7 @@ public class ConfigurationActivity extends BaseActivity {
         okButton = findViewById(R.id.okButton);
         exitButtonConfiguration = findViewById(R.id.exitButtonConfiguration);
         notiButton = findViewById(R.id.notiButton);
+        preferenciasButton = findViewById(R.id.preferenciasButton);
 
         okButton.setOnClickListener(view -> {
             Toast.makeText(this,"Configuración actualizada con exito",
@@ -33,6 +34,11 @@ public class ConfigurationActivity extends BaseActivity {
 
         notiButton.setOnClickListener(view -> {
             Intent intent = new Intent(ConfigurationActivity.this,NotificationConfigActivity.class);
+            startActivity(intent);
+        });
+
+        preferenciasButton.setOnClickListener(view -> {
+            Intent intent = new Intent(ConfigurationActivity.this,PreferencesActivity.class);
             startActivity(intent);
         });
     }

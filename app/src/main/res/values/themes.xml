@@ -34,7 +34,7 @@
         <item name="android:itemBackground">@color/button_background</item>
     </style>
     <style name="BottomNavText">
-        <item name="android:textSize">18sp</item>
+        <item name="android:textSize">15sp</item>
         <item name="android:fontFamily">@font/feather_bold</item>
     </style>
     <style name="ConfigurationButton" parent="Widget.MaterialComponents.Button">
