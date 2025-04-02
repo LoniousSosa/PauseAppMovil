@@ -9,11 +9,7 @@ import android.widget.CheckBox;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
-import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -37,7 +33,7 @@ public class PreferencesActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_preferences);
         okButton = findViewById(R.id.okButton);
-        exitButtonNoti = findViewById(R.id.exitButtonNoti);
+        exitButtonNoti = findViewById(R.id.exitButton);
         checkAppMsgs = findViewById(R.id.checkBoxAppMsgs);
         checkBoxAmigosMsgs = findViewById(R.id.checkBoxAmigosMsgs);
         checkboxAmbiental = findViewById(R.id.checboxAmbiental);

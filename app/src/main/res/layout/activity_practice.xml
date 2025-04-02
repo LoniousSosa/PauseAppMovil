@@ -70,12 +70,13 @@
     </FrameLayout>
 
     <Button
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
+        app:layout_constraintHorizontal_weight="1"
         app:layout_constraintTop_toBottomOf="@id/mediaContainer"
         android:id="@+id/startButton"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@id/posponeButton"
+        app:layout_constraintEnd_toEndOf="@id/posponeButton"
         style="@style/ButtonOne"
         android:text="@string/start"
         android:paddingVertical="24dp"
@@ -114,7 +115,16 @@
         app:labelVisibilityMode="labeled"
         app:layout_constraintBottom_toBottomOf="parent"/>
 
-
 </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <com.google.android.material.navigation.NavigationView
+        android:id="@+id/navigationView"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_gravity="start"
+        app:menu="@menu/drawer_menu"
+        app:itemIconTint="@color/white"
+        app:itemTextColor="@color/white"
+        android:background="@color/general_background"/>
 
 </androidx.drawerlayout.widget.DrawerLayout>

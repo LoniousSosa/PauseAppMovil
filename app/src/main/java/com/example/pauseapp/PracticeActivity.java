@@ -6,9 +6,8 @@ import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
-import androidx.appcompat.app.AppCompatActivity;
 
-public class PracticeActivity extends BaseActivity {
+public class PracticeActivity extends MenuFunction {
 
     private TextView timerText;
     private CountDownTimer countDownTimer;
@@ -37,6 +36,8 @@ public class PracticeActivity extends BaseActivity {
          * Si no hay video y solo es imagen, se empezará pulsando el boton
          * Si es con un video, la visbilidad del boton desaparecerá y el timer
          * empezará una vez el video inicie
+         * El tiempo del timer por default será un minuto pero dependerá
+         * de la activity
          */
 
         startButton.setOnClickListener(v -> startTimer());
@@ -45,8 +46,6 @@ public class PracticeActivity extends BaseActivity {
         posponeButton.setOnClickListener(v -> {
             if (countDownTimer != null) {
                 countDownTimer.cancel();
-                timeLeftInMillis += 30000; // Añade 30 segundos
-                startTimer();
             }
         });
     }

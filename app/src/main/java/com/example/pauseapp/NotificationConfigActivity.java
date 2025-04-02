@@ -30,7 +30,7 @@ public class NotificationConfigActivity extends AppCompatActivity {
         setContentView(R.layout.activity_notification_config);
 
         okButton = findViewById(R.id.okButton);
-        exitButtonNoti = findViewById(R.id.exitButtonNoti);
+        exitButtonNoti = findViewById(R.id.exitButton);
         checkBoxActivas = findViewById(R.id.checkBoxActivas);
         checkBoxDesactivadas = findViewById(R.id.checkBoxDesactivadas);
         noMolestarActivo = findViewById(R.id.noMolestarActivo);

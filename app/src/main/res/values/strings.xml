@@ -85,4 +85,11 @@
     <string name="audios">Audios</string>
     <string name="respuesta">Respuesta</string>
     <string name="mensajes_motivacionales">Mensajes motivacionales</string>
+    <string name="usuario_base">Usuario</string>
+    <string name="cambiar_nivel_estres">Cambiar nivel estrés</string>
+    <string name="eliminar_cuenta">Eliminar cuenta</string>
+    <string name="no_consentir">NO CONSENTIR</string>
+    <string name="consentir">CONSENTIR</string>
+    <string name="privacidad_texto">PauseAPP recoge tus datos personales para:\n\n- Recomendarte ejercicios de forma más personal\n\n- Poder crear un hábito saludable a través de las notificaciones\n</string>
+    <string name="continuar">Continuar</string>
 </resources>

@@ -6,9 +6,9 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
-public class ConfigurationActivity extends BaseActivity {
+public class ConfigurationActivity extends MenuFunction {
 
-    Button okButton,exitButtonConfiguration,notiButton,preferenciasButton;
+    Button okButton,exitButtonConfiguration,notiButton,preferenciasButton,perfilButton,privacidadButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -19,6 +19,8 @@ public class ConfigurationActivity extends BaseActivity {
         exitButtonConfiguration = findViewById(R.id.exitButtonConfiguration);
         notiButton = findViewById(R.id.notiButton);
         preferenciasButton = findViewById(R.id.preferenciasButton);
+        perfilButton = findViewById(R.id.perfilButton);
+        privacidadButton = findViewById(R.id.privacidadButton);
 
         okButton.setOnClickListener(view -> {
             Toast.makeText(this,"Configuración actualizada con exito",
@@ -40,6 +42,16 @@ public class ConfigurationActivity extends BaseActivity {
         preferenciasButton.setOnClickListener(view -> {
             Intent intent = new Intent(ConfigurationActivity.this,PreferencesActivity.class);
             startActivity(intent);
+        });
+
+        perfilButton.setOnClickListener(view -> {
+            Intent intent = new Intent(ConfigurationActivity.this, ProfileConfigurationActivity.class);
+            startActivity(intent);
+        });
+
+        privacidadButton.setOnClickListener(view -> {
+            PrivacyDialogFragment dialogFragment = new PrivacyDialogFragment();
+            dialogFragment.show(getSupportFragmentManager(),"PrivacyDialog");
         });
     }
 }

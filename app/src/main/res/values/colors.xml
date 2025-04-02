@@ -15,4 +15,5 @@
     <color name="mid_stress">#FFD94D</color>
     <color name="no_stress">#38d0d5</color>
     <color name="search_bar">#1D1AB9</color>
+    <color name="fragment_color">#5050BF</color>
 </resources>

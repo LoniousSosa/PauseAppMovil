@@ -61,7 +61,8 @@
 
         <Button
             android:textSize="17sp"
-            android:layout_marginTop="20dp"            android:id="@+id/perfilButton"
+            android:layout_marginTop="20dp"
+            android:id="@+id/perfilButton"
             android:layout_width="300dp"
             android:layout_height="wrap_content"
             style="@style/ConfigurationButton"

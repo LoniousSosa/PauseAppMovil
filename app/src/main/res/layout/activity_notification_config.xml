@@ -27,7 +27,7 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         app:layout_constraintTop_toBottomOf="@id/okButton"
-        app:layout_constraintBottom_toTopOf="@id/exitButtonNoti"
+        app:layout_constraintBottom_toTopOf="@id/exitButton"
         android:fillViewport="true">
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
@@ -251,7 +251,7 @@
     </androidx.core.widget.NestedScrollView>
 
     <Button
-        android:id="@+id/exitButtonNoti"
+        android:id="@+id/exitButton"
         android:layout_width="240dp"
         android:layout_height="wrap_content"
         android:padding="30dp"
