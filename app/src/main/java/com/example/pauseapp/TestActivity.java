@@ -1,16 +1,26 @@
 package com.example.pauseapp;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentTransaction;
 
+import com.example.pauseapp.api.AuthApiService;
+import com.example.pauseapp.api.RetrofitClient;
+
 import java.util.Arrays;
 import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
 public class TestActivity extends AppCompatActivity {
     private List<Pregunta> preguntas;
     private int preguntaActual = 0;
     private static int stressLvl;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,10 +54,34 @@ public class TestActivity extends AppCompatActivity {
             transaction.commit();
         } else {
             Toast.makeText(this, "Nivel de estrés: "+getStressLvl(), Toast.LENGTH_SHORT).show();
+            //el 1 será el id del usuario
+            enviarNivelDeEstres(1,getStressLvl());
             //Mostrar resultados
             finish();
         }
     }
+
+    private void enviarNivelDeEstres(int userId, int stressLevel) {
+        AuthApiService apiService = RetrofitClient.getClient().create(AuthApiService.class);
+        Call<Void> call = apiService.actualizarNivelEstres(userId, stressLevel);
+
+        call.enqueue(new Callback<Void>() {
+            @Override
+            public void onResponse(Call<Void> call, Response<Void> response) {
+                if (response.isSuccessful()) {
+                    Log.d("TestActivity", "Nivel de estrés actualizado correctamente");
+                } else {
+                    Log.e("TestActivity", "Error al actualizar el nivel de estrés");
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Void> call, Throwable t) {
+                Log.e("TestActivity", "Error de conexión", t);
+            }
+        });
+    }
+
 
     public void avanzarPregunta() {
         preguntaActual++;
@@ -62,3 +96,4 @@ public class TestActivity extends AppCompatActivity {
         TestActivity.stressLvl = stressLvl;
     }
 }
+

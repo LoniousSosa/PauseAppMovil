@@ -3,23 +3,23 @@ package com.example.pauseapp;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.InputType;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
 
-import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.res.ResourcesCompat;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
+
+import com.example.pauseapp.api.AuthApiService;
+import com.example.pauseapp.api.RetrofitClient;
 
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class RegisterActivity extends AppCompatActivity {
 
@@ -29,6 +29,8 @@ public class RegisterActivity extends AppCompatActivity {
 
     ArrayList<String> usuariosRegistrados;
     private boolean isPassword = false;
+    private AuthApiService authApiService;
+
 
 
     @Override
@@ -48,6 +50,8 @@ public class RegisterActivity extends AppCompatActivity {
 
         togglePasswordVisibility = findViewById(R.id.togglePasswordVisibility);
         toggleRepeatVisibility = findViewById(R.id.toggleRepeatVisibility);
+
+        authApiService = RetrofitClient.getClient().create(AuthApiService.class);
 
         creacionListener();
 
@@ -69,6 +73,13 @@ public class RegisterActivity extends AppCompatActivity {
             if (!comprobacionContras()) {
                 return;
             }
+
+            String username = userNameEdit.getText().toString();
+            String email = emailEdit.getText().toString().trim();
+            String password = passwordEditText.getText().toString();
+            String repeatPassword = repeatEdit.getText().toString();
+
+            registrarUsuario(username, email, password);
 
             //Creación de usuario y ->
 
@@ -126,6 +137,28 @@ public class RegisterActivity extends AppCompatActivity {
             return false;
         }
         return true;
+    }
+
+    private void registrarUsuario(String username, String email, String password) {
+        User user = new User(username, email, password);
+        Call<Void> call = authApiService.registerUser(user);
+
+        call.enqueue(new Callback<>() {
+            @Override
+            public void onResponse(Call<Void> call, Response<Void> response) {
+                if (response.isSuccessful()) {
+                    Toast.makeText(RegisterActivity.this, "Registro exitoso", Toast.LENGTH_LONG).show();
+                    startActivity(new Intent(RegisterActivity.this, LobbyActivity.class));
+                } else {
+                    Toast.makeText(RegisterActivity.this, "Error en el registro", Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Void> call, Throwable t) {
+                Toast.makeText(RegisterActivity.this, "Error de conexión: " + t.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     private void  creacionListener(){

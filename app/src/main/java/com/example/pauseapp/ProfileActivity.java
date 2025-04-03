@@ -108,4 +108,91 @@ public class ProfileActivity extends MenuFunction {
         iconResource = R.drawable.logo_definitivo;
         stressIcon.setImageResource(iconResource);
     }
+
+    /**
+     * public class ProfileActivity extends MenuFunction {
+     *
+     *     private ProgressBar stressBarCurrent, stressBarPrevious;
+     *     private ImageView stressIconCurrent, stressIconPrevious;
+     *     private Button stressButton;
+     *     private AuthApiService authApiService;
+     *     private int stressLevelCurrent, stressLevelPrevious;
+     *
+     *     @Override
+     *     protected void onCreate(Bundle savedInstanceState) {
+     *         super.onCreate(savedInstanceState);
+     *         setContentView(R.layout.activity_profile);
+     *         setupNavigation();
+     *
+     *         stressBarCurrent = findViewById(R.id.stressBarActual);
+     *         stressIconCurrent = findViewById(R.id.actualStressIcon);
+     *         stressBarPrevious = findViewById(R.id.stressBarAnterior);
+     *         stressIconPrevious = findViewById(R.id.previousStressIcon);
+     *         stressButton = findViewById(R.id.stressButton);
+     *
+     *         authApiService = RetrofitClient.getClient().create(AuthApiService.class);
+     *
+     *         obtenerNivelesDeEstres();
+     *
+     *         stressButton.setOnClickListener(view -> {
+     *             Intent intent = new Intent(ProfileActivity.this, TestActivity.class);
+     *             startActivity(intent);
+     *         });
+     *     }
+     *
+     *     private void obtenerNivelesDeEstres() {
+     *         String userEmail = getUserEmail(); // Método para obtener el email del usuario logueado
+     *         authApiService.getUserByEmail(userEmail).enqueue(new Callback<User>() {
+     *             @Override
+     *             public void onResponse(Call<User> call, Response<User> response) {
+     *                 if (response.isSuccessful() && response.body() != null) {
+     *                     stressLevelCurrent = Integer.parseInt(response.body().getActualStressLevel());
+     *                     stressLevelPrevious = Integer.parseInt(response.body().getInitialStressLevel());
+     *                     actualizarBarrasDeEstres();
+     *                 } else {
+     *                     Toast.makeText(ProfileActivity.this, "Error al obtener datos", Toast.LENGTH_SHORT).show();
+     *                 }
+     *             }
+     *
+     *             @Override
+     *             public void onFailure(Call<User> call, Throwable t) {
+     *                 Toast.makeText(ProfileActivity.this, "Error de conexión", Toast.LENGTH_SHORT).show();
+     *             }
+     *         });
+     *     }
+     *
+     *     private void actualizarBarrasDeEstres() {
+     *         actualizarBarraEstres(stressBarCurrent, stressIconCurrent, stressLevelCurrent);
+     *         actualizarBarraEstres(stressBarPrevious, stressIconPrevious, stressLevelPrevious);
+     *     }
+     *
+     *     private void actualizarBarraEstres(ProgressBar progressBar, ImageView stressIcon, int stressLevel) {
+     *         progressBar.setProgress(stressLevel);
+     *
+     *         LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(340, 45);
+     *         Drawable progressDrawable;
+     *         int iconResource;
+     *         int stressWidth = stressLevel * 11;
+     *
+     *         if (stressLevel >= 75) {
+     *             if (stressLevel >= 80) {
+     *                 stressWidth = 874;
+     *             }
+     *             progressDrawable = ContextCompat.getDrawable(this, R.drawable.red_progress);
+     *         } else if (stressLevel >= 50) {
+     *             progressDrawable = ContextCompat.getDrawable(this, R.drawable.yellow_progress);
+     *         } else if (stressLevel >= 25) {
+     *             progressDrawable = ContextCompat.getDrawable(this, R.drawable.green_progress);
+     *         } else {
+     *             progressDrawable = ContextCompat.getDrawable(this, R.drawable.blue_progress);
+     *         }
+     *
+     *         params = new LinearLayout.LayoutParams(stressWidth, 90);
+     *         progressBar.setLayoutParams(params);
+     *         progressBar.setProgressDrawable(progressDrawable);
+     *         iconResource = R.drawable.logo_definitivo;
+     *         stressIcon.setImageResource(iconResource);
+     *     }
+     * }
+     */
 }

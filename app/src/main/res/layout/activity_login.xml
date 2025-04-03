@@ -10,14 +10,14 @@
     tools:context=".LoginActivity">
 
     <TextView
-        android:id="@+id/userName"
+        android:id="@+id/email"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         android:layout_marginTop="135dp"
         android:layout_marginStart="70dp"
-        android:text="@string/username"
+        android:text="@string/mail"
         android:textSize="20sp"
         />
 
@@ -27,19 +27,19 @@
         android:layout_marginTop="10dp"
         android:padding="15dp"
         android:background="@color/imagebutton_background"
-        android:id="@+id/userNameEdit"
-        android:hint="@string/username"
+        android:id="@+id/mailEdit"
+        android:hint="@string/mail"
         android:textColorHint="@color/white"
         android:textColor="@color/white"
-        app:layout_constraintTop_toBottomOf="@id/userName"
-        app:layout_constraintStart_toStartOf="@id/userName"
+        app:layout_constraintTop_toBottomOf="@id/email"
+        app:layout_constraintStart_toStartOf="@id/email"
         />
 
     <TextView
         android:id="@+id/password"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@id/userNameEdit"
+        app:layout_constraintTop_toBottomOf="@id/mailEdit"
         app:layout_constraintStart_toStartOf="parent"
         android:layout_marginTop="45dp"
         android:layout_marginStart="70dp"
