@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/general_background"
-    tools:context=".TestActivity">
+    tools:context=".activities.TestActivity">
 
     <FrameLayout
         app:layout_constraintTop_toTopOf="parent"

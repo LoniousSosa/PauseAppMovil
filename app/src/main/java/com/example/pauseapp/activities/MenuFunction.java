@@ -1,10 +1,13 @@
-package com.example.pauseapp;
+package com.example.pauseapp.activities;
 import android.content.Intent;
 import android.os.Bundle;
 import android.widget.ImageButton;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.drawerlayout.widget.DrawerLayout;
+
+import com.example.pauseapp.fragments.LogoutConfirmationFragment;
+import com.example.pauseapp.R;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationView;
 

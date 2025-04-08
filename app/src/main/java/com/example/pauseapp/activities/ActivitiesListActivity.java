@@ -1,6 +1,8 @@
-package com.example.pauseapp;
+package com.example.pauseapp.activities;
 
 import android.os.Bundle;
+
+import com.example.pauseapp.R;
 
 public class ActivitiesListActivity extends MenuFunction {
 

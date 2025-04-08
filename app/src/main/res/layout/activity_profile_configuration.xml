@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/general_background"
-    tools:context=".ProfileConfigurationActivity">
+    tools:context=".activities.ProfileConfigurationActivity">
 
     <Button
         android:id="@+id/okButton"

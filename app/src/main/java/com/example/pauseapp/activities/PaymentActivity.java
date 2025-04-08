@@ -1,4 +1,4 @@
-package com.example.pauseapp;
+package com.example.pauseapp.activities;
 
 import android.annotation.SuppressLint;
 import android.os.Bundle;
@@ -7,6 +7,8 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 
 import androidx.appcompat.app.AppCompatActivity;
+
+import com.example.pauseapp.R;
 
 import java.util.HashMap;
 import java.util.Map;

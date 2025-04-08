@@ -1,4 +1,4 @@
-package com.example.pauseapp;
+package com.example.pauseapp.activities;
 
 import android.os.Bundle;
 import android.util.Log;
@@ -6,6 +6,8 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentTransaction;
 
+import com.example.pauseapp.fragments.PreguntaFragment;
+import com.example.pauseapp.R;
 import com.example.pauseapp.api.AuthApiService;
 import com.example.pauseapp.api.RetrofitClient;
 

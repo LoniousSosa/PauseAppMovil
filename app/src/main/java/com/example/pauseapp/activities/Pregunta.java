@@ -1,4 +1,4 @@
-package com.example.pauseapp;
+package com.example.pauseapp.activities;
 
 import java.io.Serializable;
 import java.util.List;

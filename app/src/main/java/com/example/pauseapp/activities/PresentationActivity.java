@@ -1,11 +1,12 @@
-package com.example.pauseapp;
+package com.example.pauseapp.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import com.example.pauseapp.R;
 
 public class PresentationActivity extends MenuFunction {
 

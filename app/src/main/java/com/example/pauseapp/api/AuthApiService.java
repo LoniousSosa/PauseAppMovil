@@ -1,11 +1,14 @@
 package com.example.pauseapp.api;
 
-import com.example.pauseapp.model.LoginRequest;
-import com.example.pauseapp.model.LoginResponse;
-import com.example.pauseapp.User;
+import com.example.pauseapp.model.*;
+import com.example.pauseapp.entidad.User;
+
+import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.http.Body;
+import retrofit2.http.GET;
+import retrofit2.http.Header;
 import retrofit2.http.POST;
 import retrofit2.http.PUT;
 import retrofit2.http.Path;
@@ -20,4 +23,17 @@ public interface AuthApiService {
 
     @PUT("users/{id}/stress-level")
     Call<Void> actualizarNivelEstres(@Path("id") int userId, @Query("stressLevel") int stressLevel);
+
+    @GET("users/{id}/get-stress")
+    Call<StressLevelResponse> getStressLvl(@Path("id") int userId);
+
+    @GET("users/me")
+    Call<UserResponse> getUser(@Header("Authorization") String token);
+
+    @GET("activities")
+    Call<List<ActivityResponse>> getActivities(
+            @Header("Authorization") String token,
+            @Query("filter") String filter,
+            @Query("search") String search
+    );
 }

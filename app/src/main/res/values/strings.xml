@@ -92,4 +92,6 @@
     <string name="consentir">CONSENTIR</string>
     <string name="privacidad_texto">PauseAPP recoge tus datos personales para:\n\n- Recomendarte ejercicios de forma más personal\n\n- Poder crear un hábito saludable a través de las notificaciones\n</string>
     <string name="continuar">Continuar</string>
+    <string name="nivel_de_estres_anterior">Nivel de estrés anterior</string>
+    <string name="nivel_de_estres_actual">Nivel de estrés actual</string>
 </resources>

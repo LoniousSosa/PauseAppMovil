@@ -1,4 +1,4 @@
-package com.example.pauseapp;
+package com.example.pauseapp.fragments;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
@@ -9,6 +9,8 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
+
+import com.example.pauseapp.activities.LoginActivity;
 
 public class LogoutConfirmationFragment extends DialogFragment {
 

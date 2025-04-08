@@ -1,8 +1,10 @@
-package com.example.pauseapp;
+package com.example.pauseapp.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Button;
+
+import com.example.pauseapp.R;
 
 public class FriendsActivity extends MenuFunction {
 

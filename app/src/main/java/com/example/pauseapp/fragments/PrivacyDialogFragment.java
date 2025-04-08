@@ -1,4 +1,4 @@
-package com.example.pauseapp;
+package com.example.pauseapp.fragments;
 
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
@@ -11,6 +11,8 @@ import android.widget.Button;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
+
+import com.example.pauseapp.R;
 
 public class PrivacyDialogFragment extends DialogFragment {
     @Nullable

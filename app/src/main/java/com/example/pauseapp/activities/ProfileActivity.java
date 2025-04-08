@@ -1,9 +1,9 @@
-package com.example.pauseapp;
+package com.example.pauseapp.activities;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -12,12 +12,22 @@ import android.widget.Toast;
 
 import androidx.core.content.ContextCompat;
 
+import com.example.pauseapp.R;
+import com.example.pauseapp.api.AuthApiService;
+import com.example.pauseapp.model.UserResponse;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
 public class ProfileActivity extends MenuFunction {
 
     private ProgressBar stressBarCurrent, stressBarPrevious;
     private ImageView stressIconCurrent, stressIconPrevious;
 
     private int stressLevelCurrent,stressLevelPrevious;
+
+    private AuthApiService authApiService;
     private Button stressButton;
 
     @Override
@@ -33,9 +43,13 @@ public class ProfileActivity extends MenuFunction {
         ImageView stressIcon = findViewById(R.id.previousStressIcon);
         stressButton = findViewById(R.id.stressButton);
 
-         stressLevelCurrent = obtenerNivelDeEstresActual(); // 0-100
+         stressLevelCurrent = obtenerNivelDeEstresActual(1); // 0-100
          stressLevelPrevious = obtenerNivelDeEstresAnterior(); // 0-100
 
+        /**
+         * Una vez esté integrado el Docker, descomentar
+         */
+        //fetchUserData();
         actualizarBarrasDeEstres();
 
         stressButton.setOnClickListener(view -> {
@@ -44,15 +58,36 @@ public class ProfileActivity extends MenuFunction {
         });
     }
 
-    private int obtenerNivelDeEstresActual() {
+    private int obtenerNivelDeEstresActual(int userId) {
         /**
          * Este stressLvl luego se pillará de la api
+         *
+         * AuthApiService apiService = RetrofitClient.getClient().create(AuthApiService.class);
+         *     Call<StressLevelResponse> call = apiService.getStressLvl(userId);
+         *
+         *     call.enqueue(new Callback<StressLevelResponse>() {
+         *         @Override
+         *         public void onResponse(Call<StressLevelResponse> call, Response<StressLevelResponse> response) {
+         *             if (response.isSuccessful() && response.body() != null) {
+         *                 stressLevelCurrent = response.body().getStressLevel();
+         *                 actualizarBarrasDeEstres();
+         *             } else {
+         *                 Log.e("ProfileActivity", "Error en la respuesta de la API");
+         *             }
+         *         }
+         *
+         *         @Override
+         *         public void onFailure(Call<StressLevelResponse> call, Throwable t) {
+         *             Log.e("ProfileActivity", "Error de conexión", t);
+         *         }
+         *     });
+         *
          */
         return TestActivity.getStressLvl(); // Simulación: estrés actual en 65%
     }
 
     private int obtenerNivelDeEstresAnterior() {
-        return 100; // Simulación: estrés anterior en 30%
+        return 100;
     }
 
     @Override
@@ -62,7 +97,7 @@ public class ProfileActivity extends MenuFunction {
     }
 
     private void actualizarBarrasDeEstres() {
-        int stressLevelCurrent = obtenerNivelDeEstresActual();
+        int stressLevelCurrent = obtenerNivelDeEstresActual(1);
         int stressLevelPrevious = obtenerNivelDeEstresAnterior();
 
         actualizarBarraEstres(stressBarCurrent, stressIconCurrent, stressLevelCurrent);
@@ -80,6 +115,7 @@ public class ProfileActivity extends MenuFunction {
         // Determinar el color de la barra y el ícono correspondiente
         Drawable progressDrawable;
         int iconResource;
+        iconResource = R.drawable.logo_definitivo;
 
         int stressWidth = stressLevel * 11;
 
@@ -88,13 +124,13 @@ public class ProfileActivity extends MenuFunction {
                stressWidth = 874;
             }
             progressDrawable = ContextCompat.getDrawable(this, R.drawable.red_progress);
-            //iconResource = R.drawable.ic_angry_face;
+            iconResource = R.drawable.logo_enfadado;
         } else if (stressLevel >= 50) {
             progressDrawable = ContextCompat.getDrawable(this, R.drawable.yellow_progress);
             //iconResource = R.drawable.ic_neutral_face;
         } else if (stressLevel >= 25) {
             progressDrawable = ContextCompat.getDrawable(this, R.drawable.green_progress);
-            //iconResource = R.drawable.ic_smile_face;
+            iconResource = R.drawable.logo_feliz;
         } else {
             progressDrawable = ContextCompat.getDrawable(this, R.drawable.blue_progress);
             //iconResource = R.drawable.ic_app_logo;
@@ -105,9 +141,38 @@ public class ProfileActivity extends MenuFunction {
 
         // Aplicar los cambios
         progressBar.setProgressDrawable(progressDrawable);
-        iconResource = R.drawable.logo_definitivo;
         stressIcon.setImageResource(iconResource);
     }
+
+    private void fetchUserData() {
+        SharedPreferences sharedPreferences = getSharedPreferences("PauseAppPrefs", MODE_PRIVATE);
+        String token = sharedPreferences.getString("auth_token", "");
+
+        if (token.isEmpty()) {
+            Toast.makeText(this, "Usuario no autenticado", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        authApiService.getUser("Bearer " + token).enqueue(new Callback<UserResponse>() {
+            @Override
+            public void onResponse(Call<UserResponse> call, Response<UserResponse> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    UserResponse user = response.body();
+                    stressLevelCurrent = Integer.parseInt(user.getActualStressLevel());
+                    stressLevelPrevious = Integer.parseInt(user.getInitialStressLevel());
+                    actualizarBarrasDeEstres();
+                } else {
+                    Toast.makeText(ProfileActivity.this, "Error al obtener datos del usuario", Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<UserResponse> call, Throwable t) {
+                Toast.makeText(ProfileActivity.this, "Error de conexión", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
 
     /**
      * public class ProfileActivity extends MenuFunction {

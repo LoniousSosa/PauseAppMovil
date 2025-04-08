@@ -1,10 +1,12 @@
-package com.example.pauseapp;
+package com.example.pauseapp.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
+
+import com.example.pauseapp.fragments.PrivacyDialogFragment;
+import com.example.pauseapp.R;
 
 public class ConfigurationActivity extends MenuFunction {
 

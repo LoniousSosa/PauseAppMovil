@@ -1,4 +1,4 @@
-package com.example.pauseapp;
+package com.example.pauseapp.activities;
 
 import android.app.AlertDialog;
 import android.content.SharedPreferences;
@@ -10,6 +10,8 @@ import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+
+import com.example.pauseapp.R;
 
 import java.util.HashMap;
 import java.util.Map;

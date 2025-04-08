@@ -1,9 +1,10 @@
-package com.example.pauseapp;
+package com.example.pauseapp.activities;
 
 import android.graphics.Color;
 import android.os.Bundle;
 import android.widget.Button;
 
+import com.example.pauseapp.R;
 import com.github.mikephil.charting.charts.BarChart;
 import com.github.mikephil.charting.components.XAxis;
 import com.github.mikephil.charting.components.YAxis;

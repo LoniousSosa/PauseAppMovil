@@ -1,4 +1,4 @@
-package com.example.pauseapp;
+package com.example.pauseapp.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -12,6 +12,8 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.res.ResourcesCompat;
 
+import com.example.pauseapp.R;
+import com.example.pauseapp.entidad.User;
 import com.example.pauseapp.api.AuthApiService;
 import com.example.pauseapp.api.RetrofitClient;
 

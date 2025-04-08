@@ -1,4 +1,4 @@
-package com.example.pauseapp;
+package com.example.pauseapp.fragments;
 import android.content.res.ColorStateList;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -14,9 +14,10 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+
 import com.example.pauseapp.R;
-import com.example.pauseapp.TestActivity;
-import com.example.pauseapp.Pregunta;
+import com.example.pauseapp.activities.TestActivity;
+import com.example.pauseapp.activities.Pregunta;
 import java.util.List;
 
 public class PreguntaFragment extends Fragment {

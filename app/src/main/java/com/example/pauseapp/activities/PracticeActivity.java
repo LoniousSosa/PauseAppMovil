@@ -1,4 +1,4 @@
-package com.example.pauseapp;
+package com.example.pauseapp.activities;
 
 import android.os.Bundle;
 import android.os.CountDownTimer;
@@ -6,6 +6,8 @@ import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import com.example.pauseapp.R;
 
 public class PracticeActivity extends MenuFunction {
 

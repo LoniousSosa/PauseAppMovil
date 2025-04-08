@@ -1,10 +1,11 @@
-package com.example.pauseapp;
+package com.example.pauseapp.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageButton;
 
+import com.example.pauseapp.R;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 public class LobbyActivity extends MenuFunction {
