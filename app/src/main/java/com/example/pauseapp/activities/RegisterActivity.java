@@ -13,9 +13,11 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.res.ResourcesCompat;
 
 import com.example.pauseapp.R;
-import com.example.pauseapp.entidad.User;
+import com.example.pauseapp.model.User;
 import com.example.pauseapp.api.AuthApiService;
 import com.example.pauseapp.api.RetrofitClient;
+import com.example.pauseapp.model.LoginRequest;
+import com.example.pauseapp.model.LoginResponse;
 
 import java.util.ArrayList;
 
@@ -61,7 +63,6 @@ public class RegisterActivity extends AppCompatActivity {
         toggleRepeatVisibility.setOnClickListener(clickListener);
 
         registerButton.setOnClickListener(view -> {
-            //Comprobación que el usuario no exista, si el nombre de usuario existe Toast
 
             if (!comprobacionUsuarios(userNameEdit.getText().toString())){
                 return;
@@ -71,7 +72,6 @@ public class RegisterActivity extends AppCompatActivity {
                 return;
             }
 
-            //Una vez no existe el usuario, comprobarContraseñas
             if (!comprobacionContras()) {
                 return;
             }
@@ -82,8 +82,6 @@ public class RegisterActivity extends AppCompatActivity {
             String repeatPassword = repeatEdit.getText().toString();
 
             registrarUsuario(username, email, password);
-
-            //Creación de usuario y ->
 
             Toast.makeText(this, "Registro realizado", Toast.LENGTH_LONG).show();
 
@@ -150,7 +148,8 @@ public class RegisterActivity extends AppCompatActivity {
             public void onResponse(Call<Void> call, Response<Void> response) {
                 if (response.isSuccessful()) {
                     Toast.makeText(RegisterActivity.this, "Registro exitoso", Toast.LENGTH_LONG).show();
-                    startActivity(new Intent(RegisterActivity.this, LobbyActivity.class));
+                    // Aquí hacemos login automáticamente
+                    getTokerAfterRegister(email, password);
                 } else {
                     Toast.makeText(RegisterActivity.this, "Error en el registro", Toast.LENGTH_SHORT).show();
                 }
@@ -186,4 +185,35 @@ public class RegisterActivity extends AppCompatActivity {
             repeatEdit.setSelection(repeatEdit.getText().length());
         };
     }
+
+    private void getTokerAfterRegister(String email, String password) {
+        LoginRequest loginRequest = new LoginRequest(email, password);
+
+        authApiService.loginUser(loginRequest).enqueue(new Callback<>() {
+            @Override
+            public void onResponse(Call<LoginResponse> call, Response<LoginResponse> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    String token = response.body().getToken();
+
+                    getSharedPreferences("PauseAppPrefs", MODE_PRIVATE)
+                            .edit()
+                            .putString("user_token", token)
+                            .apply();
+
+                    Intent intent = new Intent(RegisterActivity.this, LobbyActivity.class);
+                    startActivity(intent);
+                    finish();
+                } else {
+                    Toast.makeText(RegisterActivity.this, "Error al iniciar sesión tras el registro", Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<LoginResponse> call, Throwable t) {
+                Toast.makeText(RegisterActivity.this, "Error de conexión tras registro", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+
 }

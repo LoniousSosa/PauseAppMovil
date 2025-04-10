@@ -1,8 +1,12 @@
 package com.example.pauseapp.activities;
 
 import android.app.AlertDialog;
+import android.content.Intent;
 import android.content.SharedPreferences;
+import androidx.core.app.NotificationCompat;
+import androidx.core.app.NotificationManagerCompat;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -20,10 +24,12 @@ public class NotificationConfigActivity extends AppCompatActivity {
 
     Button okButton, exitButtonNoti;
     CheckBox checkBoxActivas, checkBoxDesactivadas, noMolestarActivo, noMolestarDesactivado;
-    private static final String PREFS_NAME = "NotificationPrefs";
+    private static final String PREFS_NAME = "PauseAppPrefs";
     private LinearLayout currentVisibleButtons = null;
 
     private Map<Button, LinearLayout> notiOptions;
+
+
 
 
     @Override
@@ -49,11 +55,28 @@ public class NotificationConfigActivity extends AppCompatActivity {
                 toggleButtonsVisibility(entry.getValue());
             });
         }
+
         loadPreferences();
+
+        checkNotificationPermission();
+
+        setMutualCheckboxes(checkBoxActivas, checkBoxDesactivadas);
+        setMutualCheckboxes(checkBoxDesactivadas, checkBoxActivas);
+        setMutualCheckboxes(noMolestarActivo, noMolestarDesactivado);
+        setMutualCheckboxes(noMolestarDesactivado, noMolestarActivo);
+
 
         okButton.setOnClickListener(view -> {
             savePreferences();
-            Toast.makeText(this, "Configuración actualizada con éxito", Toast.LENGTH_SHORT).show();
+            if (checkBoxDesactivadas.isChecked()) {
+                // Si se desactivan las notificaciones
+                Toast.makeText(this, "Las notificaciones han sido desactivadas. " +
+                        "Las configuraciones se han guardado.", Toast.LENGTH_LONG).show();
+            } else {
+                // Si se activan las notificaciones
+                Toast.makeText(this, "Las notificaciones han sido activadas. " +
+                        "Las configuraciones se han guardado.", Toast.LENGTH_LONG).show();
+            }
             try {
                 Thread.sleep(1500);
             } catch (InterruptedException e) {
@@ -85,10 +108,19 @@ public class NotificationConfigActivity extends AppCompatActivity {
     private void loadPreferences() {
         SharedPreferences prefs = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
 
-        checkBoxActivas.setChecked(prefs.getBoolean("activas", false));
-        checkBoxDesactivadas.setChecked(prefs.getBoolean("desactivadas", false));
+        boolean activas = prefs.getBoolean("activas", false);
+        boolean desactivadas = prefs.getBoolean("desactivadas", false);
+
+
         noMolestarActivo.setChecked(prefs.getBoolean("noMolestarActivo", false));
         noMolestarDesactivado.setChecked(prefs.getBoolean("noMolestarDesactivado", false));
+
+        if (!activas && !desactivadas) {
+            checkNotificationPermission();
+        } else {
+            checkBoxActivas.setChecked(activas);
+            checkBoxDesactivadas.setChecked(desactivadas);
+        }
     }
 
     private void toggleButtonsVisibility(LinearLayout selectedForm) {
@@ -102,4 +134,30 @@ public class NotificationConfigActivity extends AppCompatActivity {
             currentVisibleButtons = null;
         }
     }
+
+    private void checkNotificationPermission() {
+        NotificationManagerCompat notificationManagerCompat = NotificationManagerCompat.from(this);
+        boolean areNotificationsEnabled = notificationManagerCompat.areNotificationsEnabled();
+
+        if (getSharedPreferences(PREFS_NAME, MODE_PRIVATE).getBoolean("activas", false) == false &&
+                getSharedPreferences(PREFS_NAME, MODE_PRIVATE).getBoolean("desactivadas", false) == false) {
+            // Si las notificaciones están habilitadas, selecciona la CheckBox "activas"
+            if (areNotificationsEnabled) {
+                checkBoxActivas.setChecked(true);
+                checkBoxDesactivadas.setChecked(false);
+            } else {
+                checkBoxActivas.setChecked(false);
+                checkBoxDesactivadas.setChecked(true);
+            }
+        }
+    }
+
+    private void setMutualCheckboxes(CheckBox selected, CheckBox other) {
+        selected.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            if (isChecked) {
+                other.setChecked(false);
+            }
+        });
+    }
+
 }

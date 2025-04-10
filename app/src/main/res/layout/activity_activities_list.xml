@@ -29,6 +29,7 @@
     <androidx.appcompat.widget.AppCompatEditText
         android:id="@+id/searchBar"
         android:layout_width="0dp"
+        android:textColor="@color/white"
         android:layout_height="50dp"
         android:hint="@string/buscar"
         android:background="@color/search_bar"
@@ -58,31 +59,40 @@
             android:padding="10dp">
 
             <Button
+                android:id="@+id/btnMindfulness"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/mindfulness"
+                android:background="@color/imagebutton_background"
                 style="@style/ConfigurationButton"
                 android:textColor="@color/white"/>
 
             <Button
+                android:id="@+id/btnMeditacion"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/meditacion"
                 style="@style/ConfigurationButton"
+                android:background="@color/imagebutton_background"
+
                 android:textColor="@color/white"
                 android:layout_marginStart="10dp"/>
 
             <Button
+                android:id="@+id/btnEjercicio"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:background="@color/imagebutton_background"
                 android:text="@string/ejercicio"
                 style="@style/ConfigurationButton"
                 android:textColor="@color/white"
                 android:layout_marginStart="10dp"/>
 
             <Button
+                android:id="@+id/btnIntrospeccion"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:background="@color/imagebutton_background"
                 android:text="@string/introspeccion"
                 style="@style/ConfigurationButton"
                 android:textColor="@color/white"

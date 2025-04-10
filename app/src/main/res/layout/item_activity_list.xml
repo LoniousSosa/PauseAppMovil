@@ -25,11 +25,11 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintEnd_toStartOf="@id/solicitudDe" />
+        app:layout_constraintEnd_toStartOf="@id/tituloActividad" />
 
 
     <TextView
-        android:id="@+id/solicitudDe"
+        android:id="@+id/tituloActividad"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/activity_title"
@@ -40,14 +40,14 @@
         app:layout_constraintTop_toTopOf="@id/newFriendAddImage" />
 
     <TextView
-        android:id="@+id/nameAdd"
+        android:id="@+id/descripctionActivity"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="16dp"
         android:text="@string/description"
         android:textColor="@color/white"
         android:textSize="12sp"
-        app:layout_constraintTop_toTopOf="@id/solicitudDe"
+        app:layout_constraintTop_toTopOf="@id/tituloActividad"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@id/seeProfileButton"
         app:layout_constraintHorizontal_bias="0.466"
@@ -62,7 +62,7 @@
         android:id="@+id/seeProfileButton"
         app:layout_constraintTop_toTopOf="@id/newFriendAddImage"
         app:layout_constraintBottom_toBottomOf="@id/newFriendAddImage"
-        app:layout_constraintStart_toEndOf="@id/solicitudDe"
+        app:layout_constraintStart_toEndOf="@id/tituloActividad"
         app:layout_constraintEnd_toEndOf="parent"
         />
 

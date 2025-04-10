@@ -32,6 +32,9 @@ public class LoginActivity extends AppCompatActivity {
     private EditText mailEditText, passwordEditText;
     private boolean isPassword = false;
     private ImageView googleIcon, otherIcon;
+
+    private static final String PREFS_NAME = "PauseAppPrefs";
+
     private AuthApiService authApiService;
 
     @Override
@@ -101,12 +104,12 @@ public class LoginActivity extends AppCompatActivity {
     private void saveToken(String token) {
         try {
             JWT jwt = new JWT(token);
-            int userId = jwt.getClaim("userId").asInt();  // Ajusta el nombre del claim según tu backend
+            int userId = jwt.getClaim("userId").asInt();
 
-            SharedPreferences sharedPreferences = getSharedPreferences("PauseAppPrefs", MODE_PRIVATE);
+            SharedPreferences sharedPreferences = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
             SharedPreferences.Editor editor = sharedPreferences.edit();
             editor.putInt("user_id", userId);
-            editor.putString("auth_token", token);  // Guarda también el token para futuras llamadas
+            editor.putString("auth_token", token);
             editor.apply();
 
             Log.d("LoginActivity", "Usuario ID guardado: " + userId);

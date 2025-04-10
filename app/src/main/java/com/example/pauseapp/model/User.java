@@ -1,4 +1,4 @@
-package com.example.pauseapp.entidad;
+package com.example.pauseapp.model;
 
 public class User {
     private String name;

@@ -1,5 +1,6 @@
 package com.example.pauseapp.activities;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.Toast;
@@ -59,15 +60,18 @@ public class TestActivity extends AppCompatActivity {
             //el 1 será el id del usuario
             enviarNivelDeEstres(1,getStressLvl());
             //Mostrar resultados
+            Intent intent = new Intent(TestActivity.this,ProfileActivity.class);
+            intent.putExtra("stressLevelCurrent", getStressLvl());
+            startActivity(intent);
             finish();
         }
     }
 
     private void enviarNivelDeEstres(int userId, int stressLevel) {
         AuthApiService apiService = RetrofitClient.getClient().create(AuthApiService.class);
-        Call<Void> call = apiService.actualizarNivelEstres(userId, stressLevel);
+        Call<Void> call = apiService.actualizarNivelEstres(userId, stressLevel,getUserToken());
 
-        call.enqueue(new Callback<Void>() {
+        call.enqueue(new Callback<>() {
             @Override
             public void onResponse(Call<Void> call, Response<Void> response) {
                 if (response.isSuccessful()) {
@@ -96,6 +100,10 @@ public class TestActivity extends AppCompatActivity {
 
     public static void setStressLvl(int stressLvl) {
         TestActivity.stressLvl = stressLvl;
+    }
+
+    private String getUserToken() {
+        return getSharedPreferences("PauseAppPrefs", MODE_PRIVATE).getString("user_token", "");
     }
 }
 
