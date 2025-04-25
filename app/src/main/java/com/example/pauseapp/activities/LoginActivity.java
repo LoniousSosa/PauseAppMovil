@@ -104,11 +104,11 @@ public class LoginActivity extends AppCompatActivity {
     private void saveToken(String token) {
         try {
             JWT jwt = new JWT(token);
-            int userId = jwt.getClaim("userId").asInt();
+            long userId = jwt.getClaim("userId").asLong();
 
             SharedPreferences sharedPreferences = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
             SharedPreferences.Editor editor = sharedPreferences.edit();
-            editor.putInt("user_id", userId);
+            editor.putLong("user_id", userId);
             editor.putString("auth_token", token);
             editor.apply();
 

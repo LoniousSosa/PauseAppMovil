@@ -94,4 +94,12 @@
     <string name="continuar">Continuar</string>
     <string name="nivel_de_estres_anterior">Nivel de estrés anterior</string>
     <string name="nivel_de_estres_actual">Nivel de estrés actual</string>
+    <string name="frecuencia">Frecuencia</string>
+    <string name="cada_12_horas">Cada 12 horas</string>
+    <string name="cada_24_horas">Cada 24 horas</string>
+    <string name="titulo_de_la_alerta">Título de la alerta</string>
+    <string name="mensaje_de_la_alerta">Mensaje de la alerta</string>
+    <string name="crear_alerta">Crear alerta</string>
+    <string name="crear_nueva_alerta">Crear nueva alerta</string>
+    <string name="nueva_alerta">Nueva alerta</string>
 </resources>

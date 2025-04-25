@@ -1,6 +1,7 @@
 package com.example.pauseapp.model;
 
 public class User {
+    private long id;
     private String name;
     private String email;
     private String password;
@@ -16,6 +17,14 @@ public class User {
         this.name = username;
         this.email = email;
         this.password = password;
+    }
+
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
     }
 
     public String getUsername() { return name; }

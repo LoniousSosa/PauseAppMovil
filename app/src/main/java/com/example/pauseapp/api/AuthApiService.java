@@ -42,8 +42,78 @@ public interface AuthApiService {
             @Query("filter") String filter,
             @Query("search") String search
     );
+    @GET("activities/{id}")
+    Call<ActivityResponse> getActivityById(
+            @Path("id") Long activityId,
+            @Header("Authorization") String token
+    );
+
     @GET("alert")
     Call<List<Alert>> getAllAlerts();
 
     @DELETE("/user/{id}")
-    Call<Void> deleteUser(@Path("id") int id, @Header("Authorization") String token);}
+    Call<Void> deleteUser(@Path("id") int id, @Header("Authorization") String token);
+
+    @GET("user/relations/friends/{userId}/search")
+    Call<List<UserRelation>> searchFriends(
+            @Path("userId") Long userId,
+            @Query("query") String query,
+            @Header("Authorization") String token
+    );
+
+    @GET("user/relations/sent/{id}")
+    Call<List<UserRelation>> getSentRelations(
+            @Path("id") Long userId,
+            @Header("Authorization") String token
+    );
+    @GET("user/relations/received/{id}")
+    Call<List<UserRelation>> getReceivedRelations(
+            @Path("id") Long userId,
+            @Header("Authorization") String token
+    );
+
+    @POST("user/relations")
+    Call<UserRelation> createUserRelation(
+            @Body UserRelationCreationRequest request,
+            @Header("Authorization") String token
+    );
+
+    @retrofit2.http.PATCH("user/relations/{id}")
+    Call<UserRelation> updateUserRelation(
+            @Path("id") Long relationId,
+            @Body UserRelationUpdateRequest request,
+            @Header("Authorization") String token
+    );
+    // Comprueba nombre único
+    @GET("users/check/{username}")
+    Call<Void> checkUsername(
+            @Path("username") String username
+    );
+
+    // Búsqueda más amplia (opcional)
+    @GET("users/search")
+    Call<List<UserResponse>> searchUsers(
+            @Query("q") String query,
+            @Header("Authorization") String token
+    );
+
+    @POST("user/{userId}/record")
+    Call<ActivityRecordResponse> createUserActivityRecord(
+                    @Path("userId") Long userId,
+                    @Body ActivityRecordCreateRequest request,
+                    @Header("Authorization") String token
+    );
+
+    @GET("user/{userId}/record")
+    Call<List<ActivityRecordResponse>> getUserActivityRecords(
+            @Path("userId") Long userId,
+            @Header("Authorization") String token
+    );
+    @POST("alert")
+    Call<AlertResponse> createAlert(
+            @Body AlertCreateRequest request,
+            @Header("Authorization") String token
+    );
+}
+
+

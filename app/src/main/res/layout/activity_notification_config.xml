@@ -31,7 +31,8 @@
         android:fillViewport="true">
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:paddingBottom="20dp">
 
 
         <TextView
@@ -205,7 +206,7 @@
         </LinearLayout>
 
         <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/intervalo"
+            android:id="@+id/frecuencia"
             android:layout_width="240dp"
             android:layout_height="wrap_content"
             app:layout_constraintTop_toBottomOf="@id/noMolestarCheckboxes"
@@ -213,38 +214,119 @@
             app:layout_constraintEnd_toEndOf="parent"
             style="@style/TriangleButton"
             android:background="@drawable/button_triangle"
-            android:text="@string/intervalo"
+            android:text="@string/frecuencia"
             android:padding="16dp"
             android:textSize="18sp"
             android:layout_marginTop="60dp"/>
 
-        <LinearLayout
-            android:id="@+id/timerLayout"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            app:layout_constraintTop_toBottomOf="@id/intervalo"
-            app:layout_constraintStart_toStartOf="@id/intervalo"
-            app:layout_constraintEnd_toEndOf="@id/intervalo"
-            android:orientation="vertical"
-            android:padding="15dp"
-            android:background="@drawable/border_shape"
-            android:backgroundTint="@color/imagebutton_background"
-            android:layout_marginTop="40dp"
-            android:gravity="center"
-            android:visibility="gone"
-            >
-
-            <TextView
-                android:id="@+id/timerText"
-                android:layout_width="wrap_content"
+            <LinearLayout
+                android:id="@+id/timerLayout"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:padding="10dp"
-                android:text="@string/timerInterval"
-                android:textSize="23sp"
-                android:textColor="@android:color/black"
-                android:background="@android:color/white"
-                android:gravity="center"/>
-        </LinearLayout>
+                app:layout_constraintStart_toStartOf="@id/frecuencia"
+                app:layout_constraintEnd_toEndOf="@id/frecuencia"
+                app:layout_constraintTop_toBottomOf="@id/frecuencia"
+                android:orientation="vertical"
+                android:layout_marginTop="20dp"
+                android:visibility="gone"
+                >
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:background="@color/imagebutton_background"
+                    style="@style/ConfigurationButton"
+                    android:padding="16dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Cada 8 horas"
+                        android:textColor="@android:color/white"
+                        android:textSize="18sp"
+                        android:layout_marginStart="14dp"/>
+
+                    <CheckBox
+                        android:id="@+id/cadaocho"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="10dp"
+                        android:button="@drawable/ic_checkbox_unchecked"
+                        android:buttonTint="@android:color/white"/>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:background="@color/imagebutton_background"
+                    style="@style/ConfigurationButton"
+                    android:layout_marginTop="20dp"
+                    android:padding="16dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/cada_12_horas"
+                        android:textColor="@android:color/white"
+                        android:textSize="18sp"
+                        android:layout_marginStart="8dp"/>
+
+                    <CheckBox
+                        android:id="@+id/cadadoce"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="8dp"
+                        android:button="@drawable/ic_checkbox_unchecked"
+                        android:buttonTint="@android:color/white"/>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:background="@color/imagebutton_background"
+                    style="@style/ConfigurationButton"
+                    android:layout_marginTop="20dp"
+                    android:padding="16dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/cada_24_horas"
+                        android:textColor="@android:color/white"
+                        android:textSize="18sp"
+                        android:layout_marginStart="8dp"/>
+
+                    <CheckBox
+                        android:id="@+id/cadaveinticuatro"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="8dp"
+                        android:button="@drawable/ic_checkbox_unchecked"
+                        android:buttonTint="@android:color/white"/>
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <Button
+                android:id="@+id/createAlertShortcut"
+                app:layout_constraintStart_toStartOf="@id/frecuencia"
+                app:layout_constraintEnd_toEndOf="@id/frecuencia"
+                android:layout_width="240dp"
+                android:fontFamily="@font/feather_bold"
+                android:layout_height="wrap_content"
+                android:text="@string/crear_nueva_alerta"
+                style="@style/ButtonOne"
+                android:padding="24dp"
+                android:textAllCaps="false"
+                android:textSize="18sp"
+                app:layout_constraintTop_toBottomOf="@id/frecuencia"
+                android:layout_marginTop="60dp"
+                />
+
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

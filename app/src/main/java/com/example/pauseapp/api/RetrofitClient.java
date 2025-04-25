@@ -5,6 +5,8 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class RetrofitClient {
     private static final String BASE_URL = "https://127.0.0.1:8080";
+    //Por ahora está en localhost, en un futuro tendrá el dominio asignado en
+    //el servidor AWS
     private static Retrofit retrofit = null;
 
     public static Retrofit getClient() {
