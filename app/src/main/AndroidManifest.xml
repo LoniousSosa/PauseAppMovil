@@ -15,6 +15,9 @@
         android:theme="@style/Theme.PauseApp"
         tools:targetApi="31">
         <activity
+            android:name=".activities.InitialFiltersActivity"
+            android:exported="false" />
+        <activity
             android:name=".activities.NewAlertActivity"
             android:exported="false" />
         <activity

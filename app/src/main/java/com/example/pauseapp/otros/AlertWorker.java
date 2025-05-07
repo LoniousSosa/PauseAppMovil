@@ -1,5 +1,7 @@
 package com.example.pauseapp.otros;
 
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
 import android.content.Context;
 import android.content.pm.PackageManager;
 import android.os.Build;
@@ -24,16 +26,17 @@ import retrofit2.Response;
 
 
 public class AlertWorker extends Worker {
-
+    private static final String CHANNEL_ID   = "alerts_channel";
+    private static final String CHANNEL_NAME = "Alertas PauseApp";
     public AlertWorker(@NonNull Context context, @NonNull WorkerParameters workerParams) {
         super(context, workerParams);
+        createNotificationChannel();
     }
 
     @NonNull
     @Override
     public Result doWork() {
         AuthApiService apiService = RetrofitClient.getClient().create(AuthApiService.class);
-
         Call<List<Alert>> call = apiService.getAllAlerts();
         call.enqueue(new Callback<>() {
             @Override
@@ -54,6 +57,21 @@ public class AlertWorker extends Worker {
         return Result.success();
     }
 
+    private void createNotificationChannel() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            NotificationChannel channel = new NotificationChannel(
+                    CHANNEL_ID,
+                    CHANNEL_NAME,
+                    NotificationManager.IMPORTANCE_HIGH
+            );
+            channel.setDescription("Canal para alertas de PauseApp");
+            NotificationManager nm =
+                    (NotificationManager) getApplicationContext()
+                            .getSystemService(Context.NOTIFICATION_SERVICE);
+            nm.createNotificationChannel(channel);
+        }
+    }
+
     private void showNotification(String title, String message) {
         Context context = getApplicationContext();
         NotificationManagerCompat notificationManager = NotificationManagerCompat.from(context);
@@ -65,7 +83,7 @@ public class AlertWorker extends Worker {
         }
 
         NotificationCompat.Builder builder = new NotificationCompat.Builder(context, "alert_channel")
-                .setSmallIcon(R.drawable.actividad4_2)
+                .setSmallIcon(R.drawable.logo_definitivo)
                 .setContentTitle(title)
                 .setContentText(message)
                 .setPriority(NotificationCompat.PRIORITY_HIGH)

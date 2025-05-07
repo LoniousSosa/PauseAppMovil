@@ -20,6 +20,7 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.core.app.NotificationManagerCompat;
 import androidx.work.ExistingPeriodicWorkPolicy;
+import androidx.work.OneTimeWorkRequest;
 import androidx.work.PeriodicWorkRequest;
 import androidx.work.WorkManager;
 
@@ -35,8 +36,10 @@ public class NotificationConfigActivity extends AppCompatActivity {
     private static final String PREFS_NAME = "PauseAppPrefs";
     private static final String KEY_NOTIFICATION_INTERVAL = "notification_interval_hours";
     private static final int PERMISSION_REQUEST_CODE = 1001;
+    private static final int REQ_NOTIFY = 1001;
 
-    private Button okButton, exitButtonNoti;
+
+    private Button okButton, exitButtonNoti, testBtn,shortcut;
     private CheckBox checkBoxActivas, checkBoxDesactivadas, noMolestarActivo, noMolestarDesactivado;
     private CheckBox cadaOcho, cadaDoce, cadaVeinticuatro;
     private LinearLayout currentVisibleButtons;
@@ -49,6 +52,8 @@ public class NotificationConfigActivity extends AppCompatActivity {
 
         okButton = findViewById(R.id.okButton);
         exitButtonNoti = findViewById(R.id.exitButton);
+        testBtn = findViewById(R.id.btnTestNotification);
+
 
         checkBoxActivas = findViewById(R.id.checkBoxActivas);
         checkBoxDesactivadas = findViewById(R.id.checkBoxDesactivadas);
@@ -59,10 +64,7 @@ public class NotificationConfigActivity extends AppCompatActivity {
         cadaDoce = findViewById(R.id.cadadoce);
         cadaVeinticuatro = findViewById(R.id.cadaveinticuatro);
 
-        Button shortcut = findViewById(R.id.createAlertShortcut);
-        shortcut.setOnClickListener(v -> {
-            startActivity(new Intent(this, NewAlertActivity.class));
-        });
+        shortcut = findViewById(R.id.createAlertShortcut);
 
         notiOptions = new HashMap<>();
         notiOptions.put(findViewById(R.id.statusButton), findViewById(R.id.statusCheckBoxes));
@@ -119,6 +121,17 @@ public class NotificationConfigActivity extends AppCompatActivity {
                         .setNegativeButton("Cancelar", (d,w) -> d.dismiss())
                         .show()
         );
+
+        shortcut.setOnClickListener(v -> {
+            Intent intent = new Intent(this,NewAlertActivity.class);
+            startActivity(intent);
+        });
+
+        testBtn.setOnClickListener(v -> {
+            OneTimeWorkRequest testRequest = new OneTimeWorkRequest.Builder(AlertWorker.class)
+                    .build();
+            WorkManager.getInstance(this).enqueue(testRequest);
+        });
     }
 
     private void savePreferences() {
@@ -200,9 +213,19 @@ public class NotificationConfigActivity extends AppCompatActivity {
                                            @NonNull String[] permissions,
                                            @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        if (requestCode == PERMISSION_REQUEST_CODE
-                && grantResults.length > 0
-                && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+        if (requestCode == REQ_NOTIFY) {
+            if (grantResults.length > 0
+                    && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                // El usuario ha dado permiso: ya se podrán mostrar notificaciones.
+                Toast.makeText(this,
+                        "Permiso de notificaciones concedido",
+                        Toast.LENGTH_SHORT).show();
+            } else {
+                // Sin permiso, no se mostrarán.
+                Toast.makeText(this,
+                        "Sin permiso de notificaciones",
+                        Toast.LENGTH_SHORT).show();
+            }
         }
     }
 }
