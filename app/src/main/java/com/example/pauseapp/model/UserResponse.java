@@ -1,6 +1,8 @@
 package com.example.pauseapp.model;
 
 import com.google.gson.annotations.SerializedName;
+
+import java.util.List;
 import java.util.Set;
 
 public class UserResponse {
@@ -13,10 +15,10 @@ public class UserResponse {
     private Boolean isSubscribed;
 
     @SerializedName("initialStressLevel")
-    private String initialStressLevel;
+    private float initialStressLevel;
 
     @SerializedName("actualStressLevel")
-    private String actualStressLevel;
+    private float actualStressLevel;
 
     @SerializedName("streakDays")
     private Integer streakDays;
@@ -46,13 +48,6 @@ public class UserResponse {
         return isSubscribed;
     }
 
-    public String getInitialStressLevel() {
-        return initialStressLevel;
-    }
-
-    public String getActualStressLevel() {
-        return actualStressLevel;
-    }
 
     public Integer getStreakDays() {
         return streakDays;
@@ -69,5 +64,11 @@ public class UserResponse {
     public Set<String> getRoles() {
         return roles;
     }
-}
 
+    @SerializedName("stressLevels")
+    private List<StressLevelResponse> stressLevels;
+
+    public List<StressLevelResponse> getStressLevels() {
+        return stressLevels;
+    }
+}

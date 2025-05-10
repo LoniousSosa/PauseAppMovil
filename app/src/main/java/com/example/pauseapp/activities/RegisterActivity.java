@@ -3,6 +3,7 @@ package com.example.pauseapp.activities;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.InputType;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -18,6 +19,8 @@ import com.example.pauseapp.api.AuthApiService;
 import com.example.pauseapp.api.RetrofitClient;
 import com.example.pauseapp.model.LoginRequest;
 import com.example.pauseapp.model.LoginResponse;
+
+import java.io.IOException;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -143,21 +146,35 @@ public class RegisterActivity extends AppCompatActivity {
             @Override
             public void onResponse(Call<LoginResponse> call, Response<LoginResponse> response) {
                 if (response.isSuccessful() && response.body() != null) {
+                    Toast.makeText(RegisterActivity.this,
+                            "Token guardado correctamente " , Toast.LENGTH_SHORT).show();
                     String token = response.body().getToken();
                     getSharedPreferences(PREFS_NAME, MODE_PRIVATE)
                             .edit()
                             .putString("auth_token", token)
                             .apply();
 
-                    startActivity(new Intent(RegisterActivity.this, LobbyActivity.class)
-                            .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK));
+                    Intent intent = new Intent(RegisterActivity.this, LobbyActivity.class);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+                    startActivity(intent);
                     finish();
                 } else {
+                    try {
+                        String errorBody = response.errorBody() != null
+                                ? response.errorBody().string()
+                                : "–sin cuerpo–";
+                        Log.e("RegisterActivity", "Login tras registro falló. code="
+                                + response.code()
+                                + " errorBody=" + errorBody);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
                     Toast.makeText(RegisterActivity.this,
-                            "Error al iniciar sesión tras el registro",
+                            "Error al iniciar sesión tras el registro (" + response.code() + ")",
                             Toast.LENGTH_SHORT).show();
                 }
             }
+
             @Override
             public void onFailure(Call<LoginResponse> call, Throwable t) {
                 Toast.makeText(RegisterActivity.this,

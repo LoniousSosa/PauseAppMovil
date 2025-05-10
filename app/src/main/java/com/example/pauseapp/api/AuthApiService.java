@@ -1,71 +1,84 @@
 package com.example.pauseapp.api;
 
 import com.example.pauseapp.model.*;
-import com.example.pauseapp.model.User;
 
 import java.util.List;
 
 import retrofit2.Call;
-import retrofit2.http.Body;
-import retrofit2.http.DELETE;
-import retrofit2.http.GET;
-import retrofit2.http.Header;
-import retrofit2.http.POST;
-import retrofit2.http.PUT;
-import retrofit2.http.Path;
-import retrofit2.http.Query;
+import retrofit2.http.*;
 
 public interface AuthApiService {
-    @POST("/register") // Ajusta según tu endpoint en Spring Boot
+    // —— Públicos — no requieren token —————————————————————————————
+
+    @POST("auth/register")
     Call<Void> registerUser(@Body User user);
 
-    @POST("/login") // Ruta de login en tu backend Spring Boot
+    @POST("auth/login")
     Call<LoginResponse> loginUser(@Body LoginRequest loginRequest);
 
-    //Todas las llamadas menos register y login tendrán que pasar un token
+    @GET("user/check/{username}")
+    Call<Void> checkUsername(@Path("username") String username);
 
-    @PUT("users/{id}/stress-level")
+    // —— Protegidos — necesitan Authorization: "Bearer <token>" ————————
+
+    @PUT("user/{id}/stress-level")
     Call<Void> actualizarNivelEstres(
             @Path("id") int userId,
-            @Query("stressLevel") int stressLevel,
-            @Header("Authorization") String token);
+            @Query("stressLevel") float stressLevel,
+            @Header("Authorization") String token
+    );
 
-    @GET("users/{id}/get-stress")
-    Call<StressLevelResponse> getStressLvl(@Path("id") int userId,@Header("Authorization") String token);
+    @GET("user/{id}/get-stress")
+    Call<StressLevelResponse> getStressLvl(
+            @Path("id") int userId,
+            @Header("Authorization") String token
+    );
 
-    @GET("users/me")
+    @GET("user/me")
     Call<UserResponse> getUser(@Header("Authorization") String token);
 
-    @GET("activities")
+    @GET("user")
+    Call<List<UserResponse>> getAllUsers(
+            @Header("Authorization") String token
+    );
+
+
+    @GET("activity")
     Call<List<ActivityResponse>> getActivities(
             @Header("Authorization") String token,
             @Query("filter") String filter,
             @Query("search") String search
     );
-    @GET("activities/{id}")
+
+    @GET("activity/{id}")
     Call<ActivityResponse> getActivityById(
             @Path("id") Long activityId,
             @Header("Authorization") String token
     );
 
     @GET("alert")
-    Call<List<Alert>> getAllAlerts();
+    Call<List<Alert>> getAllAlerts(@Header("Authorization") String token);
 
-    @DELETE("/user/{id}")
-    Call<Void> deleteUser(@Path("id") int id, @Header("Authorization") String token);
-
-    @GET("user/relations/friends/{userId}/search")
-    Call<List<UserRelation>> searchFriends(
-            @Path("userId") Long userId,
-            @Query("query") String query,
+    @POST("alert")
+    Call<AlertResponse> createAlert(
+            @Body AlertCreateRequest request,
             @Header("Authorization") String token
     );
+
+    @DELETE("user/{id}")
+    Call<Void> deleteUser(
+            @Path("id") int id,
+            @Header("Authorization") String token
+    );
+
+    // —— Relaciones entre usuarios ————————————————————————————————
 
     @GET("user/relations/sent/{id}")
     Call<List<UserRelation>> getSentRelations(
             @Path("id") Long userId,
             @Header("Authorization") String token
     );
+
     @GET("user/relations/received/{id}")
     Call<List<UserRelation>> getReceivedRelations(
             @Path("id") Long userId,
@@ -78,30 +91,42 @@ public interface AuthApiService {
             @Header("Authorization") String token
     );
 
-    @retrofit2.http.PATCH("user/relations/{id}")
+    @PATCH("user/relations/{id}")
     Call<UserRelation> updateUserRelation(
             @Path("id") Long relationId,
             @Body UserRelationUpdateRequest request,
             @Header("Authorization") String token
     );
-    // Comprueba nombre único
-    @GET("users/check/{username}")
-    Call<Void> checkUsername(
-            @Path("username") String username
-    );
 
-    // Búsqueda más amplia (opcional)
-    @GET("users/search")
-    Call<List<UserResponse>> searchUsers(
-            @Query("q") String query,
+    /** Borra una relación pendiente (opcional) */
+    @DELETE("user/relations/{id}")
+    Call<Void> deleteUserRelation(
+            @Path("id") Long relationId,
             @Header("Authorization") String token
     );
 
+    /** Devuelve sólo los amigos ya aceptados */
+    @GET("user/relations/{id}/friends")
+    Call<List<User>> getFriends(
+            @Path("id") Long userId,
+            @Header("Authorization") String token
+    );
+
+    /** Busca dentro de los amigos ya aceptados */
+    @GET("user/relations/{id}/friends/search")
+    Call<List<User>> searchFriends(
+            @Path("id") Long userId,
+            @Query("query") String q,
+            @Header("Authorization") String token
+    );
+
+    // —— ActivityRecord ——————————————————————————————————————————
+
     @POST("user/{userId}/record")
     Call<ActivityRecordResponse> createUserActivityRecord(
-                    @Path("userId") Long userId,
-                    @Body ActivityRecordCreateRequest request,
-                    @Header("Authorization") String token
+            @Path("userId") Long userId,
+            @Body ActivityRecordCreateRequest request,
+            @Header("Authorization") String token
     );
 
     @GET("user/{userId}/record")
@@ -109,11 +134,4 @@ public interface AuthApiService {
             @Path("userId") Long userId,
             @Header("Authorization") String token
     );
-    @POST("alert")
-    Call<AlertResponse> createAlert(
-            @Body AlertCreateRequest request,
-            @Header("Authorization") String token
-    );
 }
-
-

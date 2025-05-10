@@ -22,7 +22,7 @@ import retrofit2.Response;
 public class TestActivity extends AppCompatActivity {
     private List<Pregunta> preguntas;
     private int preguntaActual = 0;
-    private static int stressLvl;
+    private static float stressLvl;
 
 
     @Override
@@ -67,7 +67,7 @@ public class TestActivity extends AppCompatActivity {
         }
     }
 
-    private void enviarNivelDeEstres(int userId, int stressLevel) {
+    private void enviarNivelDeEstres(int userId, float stressLevel) {
         AuthApiService apiService = RetrofitClient.getClient().create(AuthApiService.class);
         Call<Void> call = apiService.actualizarNivelEstres(userId, stressLevel,getUserToken());
 
@@ -75,6 +75,10 @@ public class TestActivity extends AppCompatActivity {
             @Override
             public void onResponse(Call<Void> call, Response<Void> response) {
                 if (response.isSuccessful()) {
+                    getSharedPreferences("PauseAppPrefs", MODE_PRIVATE)
+                            .edit()
+                            .putFloat("initial_stress", stressLvl)   // ← guarda aquí el initial
+                            .apply();
                     Log.d("TestActivity", "Nivel de estrés actualizado correctamente");
                 } else {
                     Log.e("TestActivity", "Error al actualizar el nivel de estrés");
@@ -87,18 +91,16 @@ public class TestActivity extends AppCompatActivity {
             }
         });
     }
-
-
     public void avanzarPregunta() {
         preguntaActual++;
         mostrarSiguientePregunta();
     }
 
-    public static int getStressLvl() {
+    public static float getStressLvl() {
         return stressLvl;
     }
 
-    public static void setStressLvl(int stressLvl) {
+    public static void setStressLvl(float stressLvl) {
         TestActivity.stressLvl = stressLvl;
     }
 

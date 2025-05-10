@@ -1,14 +1,24 @@
 package com.example.pauseapp.model;
 
+import com.google.gson.annotations.SerializedName;
+
 public class LoginRequest {
-    private String username;
+    @SerializedName("email")
+    private String email;
+
+    @SerializedName("password")
     private String password;
 
-    public LoginRequest(String username, String password) {
-        this.username = username;
+    public LoginRequest(String email, String password) {
+        this.email = email;
         this.password = password;
     }
 
-    public String getUsername() { return username; }
-    public String getPassword() { return password; }
+    public String getEmail() {
+        return email;
+    }
+
+    public String getPassword() {
+        return password;
+    }
 }

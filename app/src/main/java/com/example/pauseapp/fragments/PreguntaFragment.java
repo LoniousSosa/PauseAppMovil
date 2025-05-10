@@ -84,13 +84,13 @@ public class PreguntaFragment extends Fragment {
                         case 0:
                             break;
                         case 1:
-                            TestActivity.setStressLvl(TestActivity.getStressLvl() + 10);
+                            TestActivity.setStressLvl(TestActivity.getStressLvl() + 10f);
                             break;
                         case 2:
-                            TestActivity.setStressLvl(TestActivity.getStressLvl() + 15);
+                            TestActivity.setStressLvl(TestActivity.getStressLvl() + 15f);
                             break;
                         case 3:
-                            TestActivity.setStressLvl(TestActivity.getStressLvl() + 20);
+                            TestActivity.setStressLvl(TestActivity.getStressLvl() + 20f);
                             break;
                     }
                     ((TestActivity) getActivity()).avanzarPregunta();

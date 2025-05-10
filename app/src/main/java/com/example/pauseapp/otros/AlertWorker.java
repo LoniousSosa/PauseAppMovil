@@ -3,6 +3,7 @@ package com.example.pauseapp.otros;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.os.Build;
 
@@ -36,8 +37,15 @@ public class AlertWorker extends Worker {
     @NonNull
     @Override
     public Result doWork() {
+        SharedPreferences prefs = getApplicationContext()
+                .getSharedPreferences("PauseAppPrefs", Context.MODE_PRIVATE);
+        String token = prefs.getString("user_token", "");
+        if (token.isEmpty()) {
+            return Result.failure();
+        }
+
         AuthApiService apiService = RetrofitClient.getClient().create(AuthApiService.class);
-        Call<List<Alert>> call = apiService.getAllAlerts();
+        Call<List<Alert>> call = apiService.getAllAlerts("Bearer"+token);
         call.enqueue(new Callback<>() {
             @Override
             public void onResponse(Call<List<Alert>> call, Response<List<Alert>> response) {
@@ -91,7 +99,6 @@ public class AlertWorker extends Worker {
 
         notificationManager.notify((int) System.currentTimeMillis(), builder.build());
     }
-
 
 }
 

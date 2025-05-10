@@ -44,13 +44,14 @@
 
 
     <androidx.recyclerview.widget.RecyclerView
-
         android:id="@+id/recyclerViewSolucitudes"
         android:layout_width="match_parent"
         tools:listitem="@layout/item_friend_add"
         tools:itemCount="2"
-        android:layout_height="0dp"
+        android:layout_height="wrap_content"
         app:layout_constraintTop_toBottomOf="@id/searchBar"
+        app:layout_constraintBottom_toTopOf="@id/recyclerViewAmigos"
+        android:visibility= "gone"
         android:layout_marginTop="20dp"/>
 
     <!--
@@ -62,10 +63,34 @@
         tools:listitem="@layout/item_added_friend"
         android:id="@+id/recyclerViewAmigos"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
+        android:layout_height="wrap_content"
         app:layout_constraintTop_toBottomOf="@id/recyclerViewSolucitudes"
-        app:layout_constraintBottom_toTopOf="@id/bottom_app_bar"
+        app:layout_constraintBottom_toTopOf="@id/personasquequizas"
+        tools:itemCount="2"
+        android:visibility="gone"
         />
+
+    <TextView
+
+        android:id="@+id/personasquequizas"
+        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+        android:layout_marginTop="20dp"
+        app:layout_constraintTop_toBottomOf="@id/recyclerViewAmigos"
+        app:layout_constraintBottom_toBottomOf="@id/recyclerViewAllUsers"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:text="Personas que quizá conozcas"
+        android:textColor="@android:color/white"
+        android:textSize="18sp"/>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerViewAllUsers"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:layout_constraintTop_toBottomOf="@+id/personasquequizas"
+        app:layout_constraintBottom_toTopOf="@+id/bottom_app_bar"
+        tools:listitem="@layout/item_friend_add" />
 
     <LinearLayout
         android:id="@+id/bottom_app_bar"

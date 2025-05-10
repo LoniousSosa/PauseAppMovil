@@ -1,14 +1,17 @@
 package com.example.pauseapp.model;
 
+import com.google.gson.annotations.SerializedName;
+
 public class StressLevelResponse {
-    private int stressLevel;
+    private Long id;
 
-    // Getters y setters
-    public int getStressLevel() {
-        return stressLevel;
-    }
+    @SerializedName("level")
+    private float level;
+    @SerializedName("date")
+    private String date;
 
-    public void setStressLevel(int stressLevel) {
-        this.stressLevel = stressLevel;
-    }
+    public Long getId() { return id; }
+    public float getLevel() { return level; }
+    public String getDate() { return date; }
 }
+

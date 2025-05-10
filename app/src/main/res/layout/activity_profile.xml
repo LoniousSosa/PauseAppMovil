@@ -170,7 +170,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 app:layout_constraintTop_toBottomOf="@id/diasTituloPause"
-                android:text="DIAS"
+                android:text="0 DIAS"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 android:textSize="25sp"/>
@@ -191,14 +191,14 @@
                 android:id="@+id/numActividades"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="NUM ACTIVIDADES"
+                android:text="0 ACTIVIDADES"
                 android:textSize="25sp"
                 android:layout_marginTop="30dp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/actividadesRealizadas"
                 />
-            
+
             <Button
                 android:layout_marginTop="40dp"
                 android:layout_marginBottom="40dp"

@@ -6,12 +6,13 @@ public class User {
     private String email;
     private String password;
     private Boolean subscription = false;
-    private String initialStressLevel;
-    private String actualStressLevel = this.initialStressLevel;
+    private float initialStressLevel;
+    private float actualStressLevel;
     private Integer streakDays = 0;
     private Integer completedActivities = 0;
     private Integer alertInterval = 24;
 
+    public User() { }
 
     public User(String username, String email, String password) {
         this.name = username;
