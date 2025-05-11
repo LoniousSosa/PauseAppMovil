@@ -1,8 +1,6 @@
 package com.example.pauseapp.activities;
 
-import android.annotation.SuppressLint;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.util.Log;
@@ -21,6 +19,8 @@ import com.example.pauseapp.api.RetrofitClient;
 import com.example.pauseapp.model.StressLevelResponse;
 import com.example.pauseapp.model.UserResponse;
 
+import java.time.LocalDateTime;
+import java.util.Comparator;
 import java.util.List;
 
 import retrofit2.Call;
@@ -32,13 +32,12 @@ public class ProfileActivity extends MenuFunction {
     private static final String PREFS_NAME = "PauseAppPrefs";
     private static final String KEY_TOKEN  = "auth_token";
 
-    private TextView holaNombre, stressAnteriorText, stressActualText,diasActualizar,numActividades;
+    private TextView holaNombre, stressAnteriorText, stressActualText, diasActualizar, numActividades;
     private ProgressBar stressBarCurrent, stressBarPrevious;
     private ImageView stressIconCurrent, stressIconPrevious;
     private Button stressButton;
 
     private AuthApiService authApiService;
-    private String authToken;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,6 +45,7 @@ public class ProfileActivity extends MenuFunction {
         setContentView(R.layout.activity_profile);
         setupNavigation();
 
+        // Bind views
         stressBarCurrent = findViewById(R.id.stressBarActual);
         stressIconCurrent = findViewById(R.id.actualStressIcon);
         stressBarPrevious = findViewById(R.id.stressBarAnterior);
@@ -57,38 +57,38 @@ public class ProfileActivity extends MenuFunction {
         diasActualizar = findViewById(R.id.diasActualizar);
         numActividades = findViewById(R.id.numActividades);
 
+        // Init service
         authApiService = RetrofitClient.getClient().create(AuthApiService.class);
 
-        authToken = getSharedPreferences(PREFS_NAME, MODE_PRIVATE)
-                .getString(KEY_TOKEN, null);
-        if (authToken == null) {
+        // Validate token
+        String token = getSharedPreferences(PREFS_NAME, MODE_PRIVATE)
+                .getString(KEY_TOKEN, "");
+        if (token.isEmpty()) {
             startActivity(new Intent(this, LoginActivity.class)
-                    .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP|Intent.FLAG_ACTIVITY_NEW_TASK));
+                    .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK));
             finish();
             return;
         }
 
+        // Button to change stress level
         stressButton.setOnClickListener(v ->
                 startActivity(new Intent(ProfileActivity.this, TestActivity.class))
         );
-        fetchUserData();
+
+        // Load data
+        fetchUserData(token);
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        // Cada vez que vuelve a esta pantalla, recarga datos
-        fetchUserData();
-    }
-
-    private void fetchUserData() {
+        // Reload data whenever returning
         String token = getSharedPreferences(PREFS_NAME, MODE_PRIVATE)
                 .getString(KEY_TOKEN, "");
-        if (token.isEmpty()) {
-            Toast.makeText(this, "Usuario no autenticado", Toast.LENGTH_SHORT).show();
-            return;
-        }
+        if (!token.isEmpty()) fetchUserData(token);
+    }
 
+    private void fetchUserData(String token) {
         authApiService.getUser("Bearer " + token)
                 .enqueue(new Callback<>() {
                     @Override
@@ -105,50 +105,46 @@ public class ProfileActivity extends MenuFunction {
                     @Override
                     public void onFailure(Call<UserResponse> call, Throwable t) {
                         Toast.makeText(ProfileActivity.this,
-                                "Fallo de conexión",
-                                Toast.LENGTH_SHORT).show();
-                        Log.e("ProfileActivity", "onFailure fetchUserData", t);
+                                "Fallo de conexión", Toast.LENGTH_SHORT).show();
+                        Log.e("ProfileActivity", "fetchUserData onFailure", t);
                     }
                 });
     }
 
-
     private void applyUserData(UserResponse user) {
-        // nombre, días, actividades…
-        holaNombre.setText("Hola " + user.getName());
-        diasActualizar .setText(String.valueOf(user.getStreakDays()));
-        numActividades.setText(String.valueOf(user.getCompletedActivities()));
+        // Nombre, streak y actividades
+        holaNombre.setText("Hola " + user.getUsername());
+        diasActualizar.setText((user.getStreakDays() != null ? user.getStreakDays() : 0) + " DÍAS");
+        numActividades.setText((user.getCompletedActivities() != null ? user.getCompletedActivities() : 0) + " ACTIVIDADES");
 
-        // si tenemos stressLevels, el primero es el inicial y el último es el current
-        float initial = 0f, current = 0f;
+        // COMPUTAR NIVELES POR FECHA
+        float initialLevel = 0f, currentLevel = 0f;
         List<StressLevelResponse> levels = user.getStressLevels();
-        Log.e("comprobacion","no entra al if");
         if (levels != null && !levels.isEmpty()) {
-            initial = levels.get(0).getLevel();
-            Log.e("inicial",initial+ " inicial");
-            current = levels.get(levels.size() - 1).getLevel();
-            System.out.println(current);
+            // Ordeno por fecha (ISO-8601 sin zona)
+            levels.sort(Comparator.comparing(l ->
+                    LocalDateTime.parse(l.getDate())
+            ));
+            initialLevel = levels.get(0).getLevel();
+            currentLevel = levels.get(levels.size() - 1).getLevel();
         }
 
-        stressAnteriorText.setText("Nivel de estrés anterior: " + Math.round(initial) + "%");
-        stressActualText .setText("Nivel de estrés actual: "    + Math.round(current) + "%");
+        // Mostrar texto
+        stressAnteriorText.setText("Nivel de estrés anterior: " + Math.round(initialLevel) + "%");
+        stressActualText .setText("Nivel de estrés actual: "  + Math.round(currentLevel) + "%");
 
-        updateBar(stressBarPrevious, stressIconPrevious, (int) initial);
-        updateBar(stressBarCurrent,  stressIconCurrent,  (int) current);
+        // Actualizar progres bars e íconos
+        updateBar(stressBarPrevious, stressIconPrevious, Math.round(initialLevel));
+        updateBar(stressBarCurrent,  stressIconCurrent,  Math.round(currentLevel));
     }
 
-    private int safeParse(String s) {
-        try { return Integer.parseInt(s); }
-        catch (Exception e) { return 0; }
-    }
 
     private void updateBar(ProgressBar bar, ImageView icon, int level) {
         bar.setProgress(level);
-        int width = (level >= 80)
-                ? 874
-                : level * 11;
+        int width = (level >= 80) ? 874 : level * 11;
         Drawable drawable;
         int iconRes;
+
         if (level >= 75) {
             drawable = ContextCompat.getDrawable(this, R.drawable.red_progress);
             iconRes  = R.drawable.logo_enfadado;
@@ -162,6 +158,7 @@ public class ProfileActivity extends MenuFunction {
             drawable = ContextCompat.getDrawable(this, R.drawable.blue_progress);
             iconRes  = R.drawable.logo_zen;
         }
+
         LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(width, 90);
         bar.setLayoutParams(lp);
         bar.setProgressDrawable(drawable);

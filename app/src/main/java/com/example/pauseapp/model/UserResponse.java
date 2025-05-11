@@ -14,12 +14,6 @@ public class UserResponse {
     @SerializedName("subscription")
     private Boolean isSubscribed;
 
-    @SerializedName("initialStressLevel")
-    private float initialStressLevel;
-
-    @SerializedName("actualStressLevel")
-    private float actualStressLevel;
-
     @SerializedName("streakDays")
     private Integer streakDays;
 
@@ -36,7 +30,7 @@ public class UserResponse {
         return id;
     }
 
-    public String getName() {
+    public String getUsername() {
         return name;
     }
 

@@ -47,10 +47,10 @@ public class SuggestionAdapter extends RecyclerView.Adapter<SuggestionAdapter.VH
 
         // Ponemos el texto fijo y el nombre dinámico
         h.solicitudDe.setText("Usuario");
-        h.nameAdd.setText(u.getName());
+        h.nameAdd.setText(u.getUsername());
 
         // Botones: aceptar = añadir, perfil = ver perfil
-        h.btnAdd.setText("Aceptar");
+        h.btnAdd.setText("Añadir");
         h.btnProfile.setText("Perfil");
 
         h.btnAdd.setOnClickListener(v -> listener.onAdd(u));

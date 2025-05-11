@@ -28,6 +28,10 @@ public class User {
         this.id = id;
     }
 
+    public void setUsername(String name) {
+        this.name = name;
+    }
+
     public String getUsername() { return name; }
     public String getEmail() { return email; }
     public String getPassword() { return password; }

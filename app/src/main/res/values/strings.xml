@@ -103,4 +103,6 @@
     <string name="crear_nueva_alerta">Crear nueva alerta</string>
     <string name="nueva_alerta">Nueva alerta</string>
     <string name="anadir">Añadir</string>
+    <string name="solicitudes_pendientes">Solicitudes pendientes</string>
+    <string name="cambiar_perfil">Cambiar perfil</string>
 </resources>

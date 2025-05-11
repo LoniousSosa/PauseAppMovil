@@ -109,14 +109,14 @@
                 />
 
             <TextView
-                android:id="@+id/mail"
+                android:id="@+id/repeatPassword"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 app:layout_constraintTop_toBottomOf="@id/passwordEdit"
                 app:layout_constraintStart_toStartOf="parent"
                 android:layout_marginTop="45dp"
                 android:layout_marginStart="70dp"
-                android:text="@string/mail"
+                android:text="@string/repeat_paswd"
                 android:textSize="20sp"
                 />
 
@@ -126,26 +126,26 @@
                 android:layout_marginTop="10dp"
                 android:padding="15dp"
                 android:background="@color/imagebutton_background"
-                android:id="@+id/mailEdit"
+                android:id="@+id/repeatEdit"
                 android:hint="@string/mail"
                 android:textColorHint="@color/white"
                 android:textColor="@color/white"
-                app:layout_constraintTop_toBottomOf="@id/mail"
+                app:layout_constraintTop_toBottomOf="@id/repeatPassword"
                 app:layout_constraintStart_toStartOf="@id/password"
                 />
 
             <Button
-                android:id="@+id/changeStressButton"
+                android:id="@+id/changeProfile"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 app:layout_constraintHorizontal_weight="1"
                 android:padding="30dp"
                 android:layout_marginTop="40dp"
                 style="@style/ButtonOne"
-                android:text="@string/cambiar_nivel_estres"
-                app:layout_constraintTop_toBottomOf="@id/mailEdit"
-                app:layout_constraintStart_toStartOf="@id/mailEdit"
-                app:layout_constraintEnd_toEndOf="@id/mailEdit"
+                android:text="@string/cambiar_perfil"
+                app:layout_constraintTop_toBottomOf="@id/repeatEdit"
+                app:layout_constraintStart_toStartOf="@id/repeatEdit"
+                app:layout_constraintEnd_toEndOf="@id/repeatEdit"
                 />
 
             <Button
@@ -158,9 +158,9 @@
                 android:textAllCaps="true"
                 style="@style/ConfigurationButton"
                 android:text="@string/eliminar_cuenta"
-                app:layout_constraintTop_toBottomOf="@id/changeStressButton"
-                app:layout_constraintStart_toStartOf="@id/mailEdit"
-                app:layout_constraintEnd_toEndOf="@id/mailEdit"
+                app:layout_constraintTop_toBottomOf="@id/changeProfile"
+                app:layout_constraintStart_toStartOf="@id/repeatEdit"
+                app:layout_constraintEnd_toEndOf="@id/repeatEdit"
                 />
 
 

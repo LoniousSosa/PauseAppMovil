@@ -6,6 +6,7 @@ public class ActivityResponse {
     private Long id;
     private String name;
     private String description;
+    private Boolean isPremium;
 
     @SerializedName("type")
     private ActivityTypeResponse type;
@@ -22,5 +23,7 @@ public class ActivityResponse {
     public ActivityTypeResponse getType() { return type; }
     public String getThumbnailUrl() { return thumbnailUrl; }
     public MediaResponse getMedia() { return media; }
+    public Boolean getIsPremium() { return isPremium; }
+
 }
 

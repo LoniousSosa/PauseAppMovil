@@ -14,4 +14,3 @@ public class StressLevelResponse {
     public float getLevel() { return level; }
     public String getDate() { return date; }
 }
-

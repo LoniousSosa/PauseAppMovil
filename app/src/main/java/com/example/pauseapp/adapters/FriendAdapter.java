@@ -63,11 +63,12 @@ public class FriendAdapter extends RecyclerView.Adapter<FriendAdapter.ViewHolder
             h.btnOne.setOnClickListener(v -> listener.onAccept(r));
             h.btnTwo.setOnClickListener(v -> listener.onDeny(r));
         } else {
-            // Layout de amigos añadidos
             h.solicitudDe.setText(otherName);
-            // mostrar estado si existe:
-            String status = r.getStatus() != null ? r.getStatus() : "";
-            h.nameAdd.setText(status);
+            boolean accepted = r.getStatus();
+            String statusText = accepted ? "ACEPTADO" : "PENDIENTE";
+            h.nameAdd.setText(statusText);
+            h.nameAdd.setText(statusText);
+
             h.btnOne.setText("Perfil");
             h.btnTwo.setText("Chat");
             h.btnOne.setOnClickListener(v -> listener.onOpenProfile(r));
@@ -108,4 +109,3 @@ public class FriendAdapter extends RecyclerView.Adapter<FriendAdapter.ViewHolder
         }
     }
 }
-

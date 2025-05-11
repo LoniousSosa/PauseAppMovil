@@ -7,10 +7,11 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentTransaction;
 
-import com.example.pauseapp.fragments.PreguntaFragment;
 import com.example.pauseapp.R;
 import com.example.pauseapp.api.AuthApiService;
 import com.example.pauseapp.api.RetrofitClient;
+import com.example.pauseapp.model.UserResponse;
+import com.example.pauseapp.fragments.PreguntaFragment;
 
 import java.util.Arrays;
 import java.util.List;
@@ -23,14 +24,16 @@ public class TestActivity extends AppCompatActivity {
     private List<Pregunta> preguntas;
     private int preguntaActual = 0;
     private static float stressLvl;
-
+    private AuthApiService apiService;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_test);
 
+        // Inicializar nivel de estrés y servicio API
         stressLvl = 0;
+        apiService = RetrofitClient.getClient().create(AuthApiService.class);
 
         preguntas = Arrays.asList(
                 new Pregunta("¿Cuántas horas de sueño promedio tienes por noche?", Arrays.asList("Más de 7 horas",
@@ -51,46 +54,71 @@ public class TestActivity extends AppCompatActivity {
 
     public void mostrarSiguientePregunta() {
         if (preguntaActual < preguntas.size()) {
-            PreguntaFragment fragment = PreguntaFragment.newInstance(preguntas.get(preguntaActual), preguntaActual, preguntas.size());
+            PreguntaFragment fragment = PreguntaFragment.newInstance(
+                    preguntas.get(preguntaActual), preguntaActual, preguntas.size());
             FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
             transaction.replace(R.id.fragment_container, fragment);
             transaction.commit();
         } else {
-            Toast.makeText(this, "Nivel de estrés: "+getStressLvl(), Toast.LENGTH_SHORT).show();
-            //el 1 será el id del usuario
-            enviarNivelDeEstres(1,getStressLvl());
-            //Mostrar resultados
-            Intent intent = new Intent(TestActivity.this,ProfileActivity.class);
-            intent.putExtra("stressLevelCurrent", getStressLvl());
-            startActivity(intent);
-            finish();
+            // Al completar, actualizamos nivel de estrés en el backend
+            actualizarNivelDeEstresEnServidor(stressLvl);
         }
     }
 
-    private void enviarNivelDeEstres(int userId, float stressLevel) {
-        AuthApiService apiService = RetrofitClient.getClient().create(AuthApiService.class);
-        Call<Void> call = apiService.actualizarNivelEstres(userId, stressLevel,getUserToken());
+    private void actualizarNivelDeEstresEnServidor(float nivel) {
+        String token = getSharedPreferences("PauseAppPrefs", MODE_PRIVATE)
+                .getString("user_token", "");
+        if (token.isEmpty()) {
+            Toast.makeText(this, "Usuario no autenticado", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        // Primero obtenemos el userId
+        apiService.getUser("Bearer " + token)
+                .enqueue(new Callback<UserResponse>() {
+                    @Override
+                    public void onResponse(Call<UserResponse> call, Response<UserResponse> response) {
+                        if (response.isSuccessful() && response.body() != null) {
+                            Long userId = response.body().getId();
+                            // Ahora actualizamos el nivel
+                            apiService.actualizarNivelEstres(userId.intValue(), nivel, "Bearer " + token)
+                                    .enqueue(new Callback<Void>() {
+                                        @Override
+                                        public void onResponse(Call<Void> call, Response<Void> resp) {
+                                            if (resp.isSuccessful()) {
+                                                Log.d("TestActivity", "Nivel de estrés actualizado");
+                                            } else {
+                                                Log.e("TestActivity", "Error al actualizar nivel: " + resp.code());
+                                            }
+                                            // Navegar al perfil tras intentar actualizar
+                                            irAPerfil();
+                                        }
 
-        call.enqueue(new Callback<>() {
-            @Override
-            public void onResponse(Call<Void> call, Response<Void> response) {
-                if (response.isSuccessful()) {
-                    getSharedPreferences("PauseAppPrefs", MODE_PRIVATE)
-                            .edit()
-                            .putFloat("initial_stress", stressLvl)   // ← guarda aquí el initial
-                            .apply();
-                    Log.d("TestActivity", "Nivel de estrés actualizado correctamente");
-                } else {
-                    Log.e("TestActivity", "Error al actualizar el nivel de estrés");
-                }
-            }
+                                        @Override
+                                        public void onFailure(Call<Void> call, Throwable t) {
+                                            Log.e("TestActivity", "Fallo conexión al actualizar", t);
+                                            irAPerfil();
+                                        }
+                                    });
+                        } else {
+                            Toast.makeText(TestActivity.this,
+                                    "Error al obtener datos de usuario", Toast.LENGTH_SHORT).show();
+                        }
+                    }
 
-            @Override
-            public void onFailure(Call<Void> call, Throwable t) {
-                Log.e("TestActivity", "Error de conexión", t);
-            }
-        });
+                    @Override
+                    public void onFailure(Call<UserResponse> call, Throwable t) {
+                        Toast.makeText(TestActivity.this,
+                                "Fallo de conexión al obtener usuario", Toast.LENGTH_SHORT).show();
+                    }
+                });
     }
+
+    private void irAPerfil() {
+        Intent intent = new Intent(TestActivity.this, ProfileActivity.class);
+        startActivity(intent);
+        finish();
+    }
+
     public void avanzarPregunta() {
         preguntaActual++;
         mostrarSiguientePregunta();
@@ -103,9 +131,4 @@ public class TestActivity extends AppCompatActivity {
     public static void setStressLvl(float stressLvl) {
         TestActivity.stressLvl = stressLvl;
     }
-
-    private String getUserToken() {
-        return getSharedPreferences("PauseAppPrefs", MODE_PRIVATE).getString("user_token", "");
-    }
 }
-

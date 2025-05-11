@@ -1,5 +1,7 @@
 package com.example.pauseapp.adapters;
 
+import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,7 +11,9 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.example.pauseapp.R;
+import com.example.pauseapp.activities.PresentationActivity;
 import com.example.pauseapp.model.ActivityResponse;
+import java.util.ArrayList;
 import java.util.List;
 
 public class ActivityAdapter extends RecyclerView.Adapter<ActivityAdapter.ViewHolder> {
@@ -17,13 +21,14 @@ public class ActivityAdapter extends RecyclerView.Adapter<ActivityAdapter.ViewHo
     private List<ActivityResponse> activities;
 
     public ActivityAdapter(List<ActivityResponse> activities) {
-        this.activities = activities;
+        this.activities = new ArrayList<>(activities != null ? activities : new ArrayList<>());
     }
 
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_activity_list, parent, false);
+        View view = LayoutInflater.from(parent.getContext())
+                .inflate(R.layout.item_activity_list, parent, false);
         return new ViewHolder(view);
     }
 
@@ -33,16 +38,36 @@ public class ActivityAdapter extends RecyclerView.Adapter<ActivityAdapter.ViewHo
         holder.tituloActividad.setText(activity.getName());
         holder.descriptionActivity.setText(activity.getDescription());
 
-        // Cargar imagen con Glide
         Glide.with(holder.itemView.getContext())
                 .load(activity.getThumbnailUrl())
                 .placeholder(R.drawable.actividad4_2)
                 .into(holder.newFriendAddImage);
+
+        holder.itemView.setOnClickListener(v -> {
+            // Crea el Intent usando el contexto del itemView
+            Context ctx = v.getContext();
+            Intent intent = new Intent(ctx, PresentationActivity.class);
+            intent.putExtra("ACTIVITY_ID", activity.getId());
+            ctx.startActivity(intent);
+        });
     }
+
 
     @Override
     public int getItemCount() {
         return activities.size();
+    }
+
+    /**
+     * Actualiza la lista de actividades mostradas y refresca el RecyclerView.
+     * @param newActivities Nueva lista de ActivityResponse
+     */
+    public void updateData(List<ActivityResponse> newActivities) {
+        this.activities.clear();
+        if (newActivities != null) {
+            this.activities.addAll(newActivities);
+        }
+        notifyDataSetChanged();
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
@@ -57,3 +82,4 @@ public class ActivityAdapter extends RecyclerView.Adapter<ActivityAdapter.ViewHo
         }
     }
 }
+

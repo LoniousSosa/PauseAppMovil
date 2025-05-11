@@ -76,7 +76,7 @@ public class LoginActivity extends AppCompatActivity {
                                             UserResponse u = r2.body();
                                             prefs.edit()
                                                     .putLong(KEY_USER_ID, u.getId())
-                                                    .putString(KEY_USER_NAME, u.getName())
+                                                    .putString(KEY_USER_NAME, u.getUsername())
                                                     .apply();
 
                                             startActivity(new Intent(

@@ -1,9 +1,7 @@
 package com.example.pauseapp.api;
 
 import com.example.pauseapp.model.*;
-
 import java.util.List;
-
 import retrofit2.Call;
 import retrofit2.http.*;
 
@@ -38,23 +36,44 @@ public interface AuthApiService {
     Call<UserResponse> getUser(@Header("Authorization") String token);
 
     @GET("user")
-    Call<List<UserResponse>> getAllUsers(
-            @Header("Authorization") String token
-    );
+    Call<List<UserResponse>> getAllUsers(@Header("Authorization") String token);
 
+    // —— Activities —————————————————————————————————————————————
 
+    /** Obtener todas o filtradas por tipo(s) */
     @GET("activity")
-    Call<List<ActivityResponse>> getActivities(
+    Call<List<ActivityResponse>> getActivitiesByType(
             @Header("Authorization") String token,
-            @Query("filter") String filter,
-            @Query("search") String search
+            @Query("typeIds") List<Long> typeIds
     );
+
+    /** Buscar actividades por nombre (startsWith) */
+    @GET("activity/search")
+    Call<List<ActivityResponse>> getActivitiesByName(
+            @Header("Authorization") String token,
+            @Query("name") String name
+    );
+
+    /** Actividades recomendadas basadas en historial */
+    @GET("activity/recomended")
+    Call<List<ActivityResponse>> getRecommendedActivities(@Header("Authorization") String token);
+
+    /** Actividades premium */
+    @GET("activity/premium")
+    Call<List<ActivityResponse>> getPremiumActivities();
 
     @GET("activity/{id}")
     Call<ActivityResponse> getActivityById(
             @Path("id") Long activityId,
             @Header("Authorization") String token
     );
+
+    // en AuthApiService
+    @GET("activity/types")
+    Call<List<ActivityTypeResponse>> getActivityTypes();
+
+
+    // —— Alertas ———————————————————————————————————————————————
 
     @GET("alert")
     Call<List<Alert>> getAllAlerts(@Header("Authorization") String token);
@@ -65,13 +84,20 @@ public interface AuthApiService {
             @Header("Authorization") String token
     );
 
-    @DELETE("user/{id}")
-    Call<Void> deleteUser(
-            @Path("id") int id,
+    @PATCH("user/{id}")
+    Call<UserResponse> patchUser(
+            @Path("id") Long userId,
+            @Body UserUpdateRequest request,
             @Header("Authorization") String token
     );
 
-    // —— Relaciones entre usuarios ————————————————————————————————
+    @DELETE("user/{id}")
+    Call<Void> deleteUser(
+            @Path("id") Long id,
+            @Header("Authorization") String token
+    );
+
+    // —— Relaciones entre usuarios —————————————————————————————
 
     @GET("user/relations/sent/{id}")
     Call<List<UserRelation>> getSentRelations(
@@ -98,23 +124,20 @@ public interface AuthApiService {
             @Header("Authorization") String token
     );
 
-    /** Borra una relación pendiente (opcional) */
     @DELETE("user/relations/{id}")
     Call<Void> deleteUserRelation(
             @Path("id") Long relationId,
             @Header("Authorization") String token
     );
 
-    /** Devuelve sólo los amigos ya aceptados */
     @GET("user/relations/{id}/friends")
-    Call<List<User>> getFriends(
+    Call<List<UserResponse>> getFriends(
             @Path("id") Long userId,
             @Header("Authorization") String token
     );
 
-    /** Busca dentro de los amigos ya aceptados */
     @GET("user/relations/{id}/friends/search")
-    Call<List<User>> searchFriends(
+    Call<List<UserResponse>> searchFriends(
             @Path("id") Long userId,
             @Query("query") String q,
             @Header("Authorization") String token

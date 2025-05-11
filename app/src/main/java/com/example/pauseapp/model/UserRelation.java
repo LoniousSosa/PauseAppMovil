@@ -2,7 +2,7 @@ package com.example.pauseapp.model;
 
 public class UserRelation {
     private Long id;
-    private String status;
+    private boolean status;
     private User sender;
     private User receiver;
 
@@ -16,11 +16,11 @@ public class UserRelation {
         this.id = id;
     }
 
-    public String getStatus() {
+    public boolean getStatus() {
         return status;
     }
 
-    public void setStatus(String status) {
+    public void setStatus(boolean status) {
         this.status = status;
     }
 
