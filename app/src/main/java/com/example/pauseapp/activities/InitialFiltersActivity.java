@@ -33,6 +33,7 @@ public class InitialFiltersActivity extends AppCompatActivity {
     private static final String KEY_TYPE_CHOICES = "initial_filters_type_ids";
 
     private SharedPreferences prefs;
+    private String userToken;
     private AuthApiService apiService;
     private Set<Long> selectedTypeIds = new HashSet<>();
 
@@ -54,11 +55,13 @@ public class InitialFiltersActivity extends AppCompatActivity {
 
         filtersContainer = findViewById(R.id.filtersContainer);
         btnContinue      = findViewById(R.id.btnContinue);
+        userToken = getSharedPreferences("PauseAppPrefs", MODE_PRIVATE)
+                .getString("auth_token", "");
 
         apiService = RetrofitClient.getClient().create(AuthApiService.class);
         loadActivityTypes();
 
-        btnContinue.setOnClickListener(v -> {
+        btnContinue.setOnClickListener(view -> {
             if (selectedTypeIds.isEmpty()) {
                 Toast.makeText(this, "Selecciona al menos un filtro", Toast.LENGTH_SHORT).show();
                 return;
@@ -74,7 +77,7 @@ public class InitialFiltersActivity extends AppCompatActivity {
     }
 
     private void loadActivityTypes() {
-        apiService.getActivityTypes().enqueue(new Callback<List<ActivityTypeResponse>>() {
+        apiService.getActivityTypes("Bearer " + userToken).enqueue(new Callback<>() {
             @Override
             public void onResponse(Call<List<ActivityTypeResponse>> call,
                                    Response<List<ActivityTypeResponse>> response) {
@@ -85,6 +88,7 @@ public class InitialFiltersActivity extends AppCompatActivity {
                             "Error al cargar filtros", Toast.LENGTH_SHORT).show();
                 }
             }
+
             @Override
             public void onFailure(Call<List<ActivityTypeResponse>> call, Throwable t) {
                 Toast.makeText(InitialFiltersActivity.this,
@@ -99,7 +103,7 @@ public class InitialFiltersActivity extends AppCompatActivity {
             View row = inflater.inflate(R.layout.filter_row, filtersContainer, false);
             TextView label = row.findViewById(R.id.filterText);
             label.setText(type.getName());
-            row.setOnClickListener(v -> toggleSelection(row, type.getId()));
+            row.setOnClickListener(view -> toggleSelection(row, type.getId()));
             filtersContainer.addView(row);
         }
     }

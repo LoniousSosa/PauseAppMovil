@@ -64,7 +64,7 @@ public class ActivityInfoActivity extends MenuFunction {
 
         // 4. Get token
         SharedPreferences prefs = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
-        userToken = prefs.getString("user_token", "");
+        userToken = prefs.getString("auth_token", "");
         if (userToken == null || userToken.isEmpty()) {
             goToLogin();
             finish();

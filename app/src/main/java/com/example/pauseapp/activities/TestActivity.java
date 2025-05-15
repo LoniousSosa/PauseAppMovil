@@ -10,6 +10,8 @@ import androidx.fragment.app.FragmentTransaction;
 import com.example.pauseapp.R;
 import com.example.pauseapp.api.AuthApiService;
 import com.example.pauseapp.api.RetrofitClient;
+import com.example.pauseapp.model.CreateStressLevel;
+import com.example.pauseapp.model.StressLevelResponse;
 import com.example.pauseapp.model.UserResponse;
 import com.example.pauseapp.fragments.PreguntaFragment;
 
@@ -25,6 +27,8 @@ public class TestActivity extends AppCompatActivity {
     private int preguntaActual = 0;
     private static float stressLvl;
     private AuthApiService apiService;
+    private static final String PREFS_NAME    = "PauseAppPrefs";
+    private static final String KEY_TOKEN     = "auth_token";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,35 +70,34 @@ public class TestActivity extends AppCompatActivity {
     }
 
     private void actualizarNivelDeEstresEnServidor(float nivel) {
-        String token = getSharedPreferences("PauseAppPrefs", MODE_PRIVATE)
-                .getString("user_token", "");
+        String token = getSharedPreferences(PREFS_NAME, MODE_PRIVATE)
+                .getString(KEY_TOKEN, "");
         if (token.isEmpty()) {
             Toast.makeText(this, "Usuario no autenticado", Toast.LENGTH_SHORT).show();
             return;
         }
-        // Primero obtenemos el userId
+        // Consigue el userId como ya lo haces...
         apiService.getUser("Bearer " + token)
-                .enqueue(new Callback<UserResponse>() {
+                .enqueue(new Callback<>() {
                     @Override
                     public void onResponse(Call<UserResponse> call, Response<UserResponse> response) {
                         if (response.isSuccessful() && response.body() != null) {
-                            Long userId = response.body().getId();
-                            // Ahora actualizamos el nivel
-                            apiService.actualizarNivelEstres(userId.intValue(), nivel, "Bearer " + token)
-                                    .enqueue(new Callback<Void>() {
+                            long userId = response.body().getId();
+                            // AQUÍ: pasamos el DTO en el body
+                            CreateStressLevel dto = new CreateStressLevel(nivel);
+                            apiService.actualizarNivelEstres(userId, dto, "Bearer " + token)
+                                    .enqueue(new Callback<StressLevelResponse>() {
                                         @Override
-                                        public void onResponse(Call<Void> call, Response<Void> resp) {
+                                        public void onResponse(Call<StressLevelResponse> c, Response<StressLevelResponse> resp) {
                                             if (resp.isSuccessful()) {
                                                 Log.d("TestActivity", "Nivel de estrés actualizado");
                                             } else {
                                                 Log.e("TestActivity", "Error al actualizar nivel: " + resp.code());
                                             }
-                                            // Navegar al perfil tras intentar actualizar
                                             irAPerfil();
                                         }
-
                                         @Override
-                                        public void onFailure(Call<Void> call, Throwable t) {
+                                        public void onFailure(Call<StressLevelResponse> c, Throwable t) {
                                             Log.e("TestActivity", "Fallo conexión al actualizar", t);
                                             irAPerfil();
                                         }
@@ -104,7 +107,6 @@ public class TestActivity extends AppCompatActivity {
                                     "Error al obtener datos de usuario", Toast.LENGTH_SHORT).show();
                         }
                     }
-
                     @Override
                     public void onFailure(Call<UserResponse> call, Throwable t) {
                         Toast.makeText(TestActivity.this,
@@ -112,6 +114,7 @@ public class TestActivity extends AppCompatActivity {
                     }
                 });
     }
+
 
     private void irAPerfil() {
         Intent intent = new Intent(TestActivity.this, ProfileActivity.class);

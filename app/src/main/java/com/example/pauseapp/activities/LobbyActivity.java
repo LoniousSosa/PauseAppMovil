@@ -68,7 +68,7 @@ public class LobbyActivity extends MenuFunction {
         };
 
         SharedPreferences prefs = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
-        userToken = prefs.getString("user_token", "");
+        userToken = prefs.getString("auth_token", "");
         if (userToken == null || userToken.isEmpty()) {
             goToLogin();
             finish();
@@ -94,7 +94,7 @@ public class LobbyActivity extends MenuFunction {
 
     private void fetchActivitiesByType(List<Long> typeIds) {
         apiService.getActivitiesByType("Bearer " + userToken, typeIds)
-                .enqueue(new Callback<List<ActivityResponse>>() {
+                .enqueue(new Callback<>() {
                     @Override
                     public void onResponse(Call<List<ActivityResponse>> call,
                                            Response<List<ActivityResponse>> response) {
@@ -104,6 +104,7 @@ public class LobbyActivity extends MenuFunction {
                             fetchRandomActivities();
                         }
                     }
+
                     @Override
                     public void onFailure(Call<List<ActivityResponse>> call, Throwable t) {
                         fetchRandomActivities();
@@ -169,7 +170,7 @@ public class LobbyActivity extends MenuFunction {
                         .placeholder(R.drawable.actividad4_2)
                         .into(btn);
                 btn.setVisibility(View.VISIBLE);
-                btn.setOnClickListener(v -> {
+                btn.setOnClickListener(view -> {
                     Intent intent = new Intent(LobbyActivity.this,
                             PresentationActivity.class);
                     intent.putExtra("ACTIVITY_ID", act.getId());

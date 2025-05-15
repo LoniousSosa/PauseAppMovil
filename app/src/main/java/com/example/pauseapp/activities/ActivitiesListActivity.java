@@ -1,8 +1,10 @@
 package com.example.pauseapp.activities;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -32,7 +34,7 @@ public class ActivitiesListActivity extends MenuFunction {
     private ActivityAdapter adapter;
     private AuthApiService apiService;
     private EditText searchBar;
-    private Button btnMindfulness, btnMeditacion, btnEjercicio, btnIntrospeccion;
+    private Button btnMindfulness, btnMeditacion, btnEjercicio, btnIntrospeccion, btnTodas;
     private String userToken;
     private final Map<String, Long> activityTypeMap = new HashMap<>();
 
@@ -48,6 +50,7 @@ public class ActivitiesListActivity extends MenuFunction {
         btnMeditacion   = findViewById(R.id.btnMeditacion);
         btnEjercicio    = findViewById(R.id.btnEjercicio);
         btnIntrospeccion= findViewById(R.id.btnIntrospeccion);
+        btnTodas = findViewById(R.id.btnTodas);
 
         // 2. RecyclerView + Adapter (inicializado vacío)
         adapter = new ActivityAdapter(new ArrayList<>());
@@ -69,11 +72,16 @@ public class ActivitiesListActivity extends MenuFunction {
         // 5. Carga de tipos para filtros
         loadActivityTypes();
 
+
         // 6. Listeners de botones de filtro
-        btnMindfulness.setOnClickListener(v -> filterByType("mindfulness"));
-        btnMeditacion.setOnClickListener(v -> filterByType("meditacion"));
-        btnEjercicio.setOnClickListener(v -> filterByType("ejercicio"));
-        btnIntrospeccion.setOnClickListener(v -> filterByType("introspeccion"));
+        /**
+         * btnMindful
+         */
+        btnTodas.setOnClickListener(view -> fetchAllActivities());
+        btnMindfulness.setOnClickListener(view -> fetchPremiumActivities());
+        btnMeditacion.setOnClickListener(view -> filterByType("mediatción"));
+        btnEjercicio.setOnClickListener(view -> filterByType("yoga"));
+        btnIntrospeccion.setOnClickListener(view -> filterByType("respiración"));
 
         // 7. Live search (busca por nombre si hay texto,
         //    si no, muestra todos)
@@ -91,15 +99,13 @@ public class ActivitiesListActivity extends MenuFunction {
             }
         });
 
-        // 8. Carga inicial sin filtro
         fetchAllActivities();
     }
 
-    // --- Métodos de carga ---
 
     /** Carga tipos desde /activity/types */
     private void loadActivityTypes() {
-        Call<List<ActivityTypeResponse>> call = apiService.getActivityTypes();
+        Call<List<ActivityTypeResponse>> call = apiService.getActivityTypes("Bearer " + userToken);
         call.enqueue(new Callback<>() {
             @Override
             public void onResponse(Call<List<ActivityTypeResponse>> call,
@@ -108,7 +114,9 @@ public class ActivitiesListActivity extends MenuFunction {
                     for (ActivityTypeResponse type : resp.body()) {
                         activityTypeMap.put(type.getName().toLowerCase(), type.getId());
                     }
+                    Log.d("DBG", "Tipos cargados: " + activityTypeMap);
                 }
+                else Log.d("Error token","No pilla token");
             }
             @Override
             public void onFailure(Call<List<ActivityTypeResponse>> call, Throwable t) {
@@ -153,6 +161,14 @@ public class ActivitiesListActivity extends MenuFunction {
         call.enqueue(commonCallback());
     }
 
+    /** Carga actividades premium */
+    private void fetchPremiumActivities() {
+        Call<List<ActivityResponse>> call =
+                apiService.getPremiumActivities("Bearer " + userToken);
+        call.enqueue(commonCallback());
+    }
+
+
     /** Busca actividades por nombre */
     private void fetchActivitiesByName(String name) {
         Call<List<ActivityResponse>> call =
@@ -189,12 +205,12 @@ public class ActivitiesListActivity extends MenuFunction {
     /** Recupera el token del SharedPreferences */
     private String getUserToken() {
         return getSharedPreferences("PauseAppPrefs", MODE_PRIVATE)
-                .getString("user_token", "");
+                .getString("auth_token", "");
     }
 
     /** Placeholder: implementa aquí la redirección al login */
     private void goToLogin() {
-        // Intent i = new Intent(this, LoginActivity.class);
-        // startActivity(i);
+        Intent i = new Intent(this, LoginActivity.class);
+        startActivity(i);
     }
 }

@@ -2,6 +2,7 @@ package com.example.pauseapp.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -22,9 +23,10 @@ import retrofit2.Response;
 public class PresentationActivity extends MenuFunction {
 
     private Button startButton, infoButton;
-    private TextView activityTitle, description;
+    private TextView activityTitle, description, tvReadMore;
     private ImageView imageActivity;
 
+    private boolean isDescriptionExpanded = false;
     private AuthApiService apiService;
     private String userToken;
     private Long activityId;
@@ -40,9 +42,13 @@ public class PresentationActivity extends MenuFunction {
         imageActivity   = findViewById(R.id.imageActivity);
         startButton     = findViewById(R.id.startButton);
         infoButton      = findViewById(R.id.infoButton);
+        tvReadMore   = findViewById(R.id.tvReadMore);
 
         // 2. Configurar drawer y navegación inferior
         setupNavigation();
+        description.setMaxLines(3);
+        description.setEllipsize(TextUtils.TruncateAt.END);
+        tvReadMore.setText("Leer más");
 
         // 3. Obtener ID de actividad del Intent
         activityId = getIntent().getLongExtra("ACTIVITY_ID", -1L);
@@ -54,7 +60,7 @@ public class PresentationActivity extends MenuFunction {
 
         // 4. Obtener token y validar existencia
         userToken = getSharedPreferences("PauseAppPrefs", MODE_PRIVATE)
-                .getString("user_token", "");
+                .getString("auth_token", "");
         if (userToken == null || userToken.isEmpty()) {
             goToLogin();
             finish();
@@ -67,19 +73,34 @@ public class PresentationActivity extends MenuFunction {
         // 6. Cargar detalles de la actividad
         fetchActivityDetails(activityId);
 
-        // 7. Listeners de botones
-        startButton.setOnClickListener(v -> {
+        // 7. Listeners
+        startButton.setOnClickListener(view -> {
             // aquí podrías registrar el inicio de la actividad si lo necesitas
             Intent intent = new Intent(PresentationActivity.this, PracticeActivity.class);
             intent.putExtra("ACTIVITY_ID", activityId);
             startActivity(intent);
         });
 
-        infoButton.setOnClickListener(v -> {
+        infoButton.setOnClickListener(view -> {
             Intent intent = new Intent(PresentationActivity.this, ActivityInfoActivity.class);
             intent.putExtra("ACTIVITY_ID", activityId);
             startActivity(intent);
         });
+
+        tvReadMore.setOnClickListener(view -> {
+            if (!isDescriptionExpanded) {
+                description.setMaxLines(Integer.MAX_VALUE);
+                description.setEllipsize(null);
+                tvReadMore.setText("Leer menos");
+                isDescriptionExpanded = true;
+            } else {
+                description.setMaxLines(3);
+                description.setEllipsize(TextUtils.TruncateAt.END);
+                tvReadMore.setText("Leer más");
+                isDescriptionExpanded = false;
+            }
+        });
+
     }
 
     /**

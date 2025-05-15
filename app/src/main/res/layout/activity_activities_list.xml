@@ -59,10 +59,20 @@
             android:padding="10dp">
 
             <Button
+                android:id="@+id/btnTodas"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Todas"
+                android:layout_marginEnd="8dp"
+                android:background="@color/imagebutton_background"
+                style="@style/ConfigurationButton"
+                android:textColor="@color/white"/>
+
+            <Button
                 android:id="@+id/btnMindfulness"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/mindfulness"
+                android:text="@string/premium"
                 android:background="@color/imagebutton_background"
                 style="@style/ConfigurationButton"
                 android:textColor="@color/white"/>
@@ -83,7 +93,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:background="@color/imagebutton_background"
-                android:text="@string/ejercicio"
+                android:text="@string/yoga"
                 style="@style/ConfigurationButton"
                 android:textColor="@color/white"
                 android:layout_marginStart="10dp"/>
@@ -93,7 +103,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:background="@color/imagebutton_background"
-                android:text="@string/introspeccion"
+                android:text="@string/respiracion"
                 style="@style/ConfigurationButton"
                 android:textColor="@color/white"
                 android:layout_marginStart="10dp"/>

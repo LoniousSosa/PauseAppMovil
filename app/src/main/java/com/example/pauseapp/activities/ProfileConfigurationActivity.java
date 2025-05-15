@@ -65,7 +65,7 @@ public class ProfileConfigurationActivity extends AppCompatActivity {
                         .show()
         );
 
-        changeProfileButton.setOnClickListener(v ->
+        changeProfileButton.setOnClickListener(view ->
                 new AlertDialog.Builder(this)
                         .setTitle("Actualizar perfil")
                         .setMessage("¿Deseas actualizar tu nombre de usuario y contraseña en el servidor?")

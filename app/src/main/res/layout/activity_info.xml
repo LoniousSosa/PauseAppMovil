@@ -45,7 +45,9 @@
         app:layout_constraintTop_toBottomOf="@id/activityTitle"
         android:src="@drawable/actividad4_2"
         android:background="@color/imagebutton_background"
-        android:padding="30dp"
+        android:padding="0dp"
+        android:adjustViewBounds="true"
+        android:scaleType="centerCrop"
         android:layout_marginTop="30dp"
         />
 

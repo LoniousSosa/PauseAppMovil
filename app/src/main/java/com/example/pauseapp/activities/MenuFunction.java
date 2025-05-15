@@ -78,7 +78,7 @@ public class MenuFunction extends AppCompatActivity {
         menuLateralButton = findViewById(R.id.menuLateral);
 
         if (menuLateralButton != null) {
-            menuLateralButton.setOnClickListener(v -> drawerLayout.openDrawer(navigationView));
+            menuLateralButton.setOnClickListener(view -> drawerLayout.openDrawer(navigationView));
         }
 
         if (navigationView != null) {

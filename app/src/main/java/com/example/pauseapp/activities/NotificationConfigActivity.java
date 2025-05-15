@@ -72,7 +72,7 @@ public class NotificationConfigActivity extends AppCompatActivity {
         notiOptions.put(findViewById(R.id.frecuencia), findViewById(R.id.timerLayout));
 
         for (Map.Entry<Button, LinearLayout> entry : notiOptions.entrySet()) {
-            entry.getKey().setOnClickListener(v -> toggleButtonsVisibility(entry.getValue()));
+            entry.getKey().setOnClickListener(view -> toggleButtonsVisibility(entry.getValue()));
         }
 
         setMutualCheckboxes(checkBoxActivas, checkBoxDesactivadas);
@@ -84,7 +84,7 @@ public class NotificationConfigActivity extends AppCompatActivity {
         loadPreferences();
         ensureNotificationPermission();
 
-        okButton.setOnClickListener(v -> {
+        okButton.setOnClickListener(view -> {
             savePreferences();
             boolean enabled = checkBoxActivas.isChecked();
             boolean dnd = noMolestarActivo.isChecked();
@@ -113,7 +113,7 @@ public class NotificationConfigActivity extends AppCompatActivity {
             new Handler(Looper.getMainLooper()).postDelayed(this::finish, 1500);
         });
 
-        exitButtonNoti.setOnClickListener(v ->
+        exitButtonNoti.setOnClickListener(view ->
                 new AlertDialog.Builder(this)
                         .setTitle("Salir sin guardar")
                         .setMessage("¿Estás seguro? Los cambios no se guardarán.")
@@ -122,12 +122,12 @@ public class NotificationConfigActivity extends AppCompatActivity {
                         .show()
         );
 
-        shortcut.setOnClickListener(v -> {
+        shortcut.setOnClickListener(view -> {
             Intent intent = new Intent(this,NewAlertActivity.class);
             startActivity(intent);
         });
 
-        testBtn.setOnClickListener(v -> {
+        testBtn.setOnClickListener(view -> {
             OneTimeWorkRequest testRequest = new OneTimeWorkRequest.Builder(AlertWorker.class)
                     .build();
             WorkManager.getInstance(this).enqueue(testRequest);

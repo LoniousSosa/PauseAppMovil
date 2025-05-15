@@ -38,8 +38,8 @@ public class LoginActivity extends AppCompatActivity {
         passwordEditText = findViewById(R.id.passwordEdit);
         authApiService   = RetrofitClient.getClient().create(AuthApiService.class);
 
-        findViewById(R.id.logToLobby).setOnClickListener(v -> authenticateUser());
-        findViewById(R.id.registerSuggestion).setOnClickListener(v ->
+        findViewById(R.id.logToLobby).setOnClickListener(view -> authenticateUser());
+        findViewById(R.id.registerSuggestion).setOnClickListener(view ->
                 startActivity(new Intent(this, RegisterActivity.class))
         );
     }
@@ -79,10 +79,21 @@ public class LoginActivity extends AppCompatActivity {
                                                     .putString(KEY_USER_NAME, u.getUsername())
                                                     .apply();
 
-                                            startActivity(new Intent(
-                                                    LoginActivity.this, LobbyActivity.class
-                                            ));
+                                            boolean filtersDone = getSharedPreferences("PauseAppPrefs", MODE_PRIVATE)
+                                                    .getBoolean("initial_filters_done", false);
+
+
+                                            Intent next;
+                                            /**
+                                            if (!filtersDone) {
+                                                next = new Intent(LoginActivity.this, InitialFiltersActivity.class);
+                                            } else {
+                                                next = new Intent(LoginActivity.this, LobbyActivity.class);
+                                            }**/
+                                            next = new Intent(LoginActivity.this,LobbyActivity.class);
+                                            startActivity(next);
                                             finish();
+
                                         } else {
                                             Toast.makeText(LoginActivity.this,
                                                     "No se pudo obtener datos de usuario", Toast.LENGTH_SHORT).show();

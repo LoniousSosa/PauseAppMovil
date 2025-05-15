@@ -18,22 +18,24 @@ public interface AuthApiService {
     Call<Void> checkUsername(@Path("username") String username);
 
     // —— Protegidos — necesitan Authorization: "Bearer <token>" ————————
-
-    @PUT("user/{id}/stress-level")
-    Call<Void> actualizarNivelEstres(
-            @Path("id") int userId,
-            @Query("stressLevel") float stressLevel,
+    @POST("user/{id}/stress-level")
+    Call<StressLevelResponse> actualizarNivelEstres(
+            @Path("id") long userId,
+            @Body CreateStressLevel body,
             @Header("Authorization") String token
     );
 
-    @GET("user/{id}/get-stress")
-    Call<StressLevelResponse> getStressLvl(
-            @Path("id") int userId,
-            @Header("Authorization") String token
-    );
+
 
     @GET("user/me")
     Call<UserResponse> getUser(@Header("Authorization") String token);
+
+    @GET("user/{id}")
+    Call<UserResponse> getUserById(
+            @Path("id") long id,
+            @Header("Authorization") String token
+    );
+
 
     @GET("user")
     Call<List<UserResponse>> getAllUsers(@Header("Authorization") String token);
@@ -60,7 +62,7 @@ public interface AuthApiService {
 
     /** Actividades premium */
     @GET("activity/premium")
-    Call<List<ActivityResponse>> getPremiumActivities();
+    Call<List<ActivityResponse>> getPremiumActivities(@Header("Authorization") String token);
 
     @GET("activity/{id}")
     Call<ActivityResponse> getActivityById(
@@ -70,7 +72,7 @@ public interface AuthApiService {
 
     // en AuthApiService
     @GET("activity/types")
-    Call<List<ActivityTypeResponse>> getActivityTypes();
+    Call<List<ActivityTypeResponse>> getActivityTypes(@Header("Authorization") String token);
 
 
     // —— Alertas ———————————————————————————————————————————————
@@ -78,11 +80,20 @@ public interface AuthApiService {
     @GET("alert")
     Call<List<Alert>> getAllAlerts(@Header("Authorization") String token);
 
+    @GET("alert/{id}")
+    Call<Alert> getAlertById(
+            @Path("id") Long id,
+            @Header("Authorization") String token
+    );
+
     @POST("alert")
     Call<AlertResponse> createAlert(
             @Body AlertCreateRequest request,
             @Header("Authorization") String token
     );
+
+
+    // —— Usuarios ———————————————————————————————————————————
 
     @PATCH("user/{id}")
     Call<UserResponse> patchUser(
@@ -90,6 +101,7 @@ public interface AuthApiService {
             @Body UserUpdateRequest request,
             @Header("Authorization") String token
     );
+
 
     @DELETE("user/{id}")
     Call<Void> deleteUser(

@@ -58,7 +58,7 @@ public class PracticeActivity extends MenuFunction {
 
         // Get token
         SharedPreferences prefs = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
-        userToken = prefs.getString("user_token", "");
+        userToken = prefs.getString("auth_token", "");
         if (userToken == null || userToken.isEmpty()) {
             goToLogin();
             finish();
@@ -100,11 +100,11 @@ public class PracticeActivity extends MenuFunction {
                 });
 
         // Set listeners
-        startButton.setOnClickListener(v -> {
+        startButton.setOnClickListener(view -> {
             // Start timer when user presses start
             startTimer();
         });
-        posponeButton.setOnClickListener(v -> {
+        posponeButton.setOnClickListener(view -> {
             if (countDownTimer != null) {
                 countDownTimer.cancel();
             }
@@ -113,7 +113,7 @@ public class PracticeActivity extends MenuFunction {
 
     private void fetchCurrentUser() {
         apiService.getUser("Bearer " + userToken)
-                .enqueue(new Callback<UserResponse>() {
+                .enqueue(new Callback<>() {
                     @Override
                     public void onResponse(Call<UserResponse> call, Response<UserResponse> response) {
                         if (response.isSuccessful() && response.body() != null) {

@@ -105,4 +105,7 @@
     <string name="anadir">Añadir</string>
     <string name="solicitudes_pendientes">Solicitudes pendientes</string>
     <string name="cambiar_perfil">Cambiar perfil</string>
+    <string name="yoga">Yoga</string>
+    <string name="premium">Premium</string>
+    <string name="respiracion">Respiración</string>
 </resources>

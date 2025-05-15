@@ -1,6 +1,7 @@
 package com.example.pauseapp.activities;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.InputType;
 import android.util.Log;
@@ -54,7 +55,7 @@ public class RegisterActivity extends AppCompatActivity {
         togglePasswordVisibility.setOnClickListener(clickListener);
         toggleRepeatVisibility.setOnClickListener(clickListener);
 
-        registerButton.setOnClickListener(v -> attemptRegister());
+        registerButton.setOnClickListener(view -> attemptRegister());
     }
 
     private void attemptRegister() {
@@ -147,14 +148,21 @@ public class RegisterActivity extends AppCompatActivity {
             public void onResponse(Call<LoginResponse> call, Response<LoginResponse> response) {
                 if (response.isSuccessful() && response.body() != null) {
                     Toast.makeText(RegisterActivity.this,
-                            "Token guardado correctamente " , Toast.LENGTH_SHORT).show();
+                            "Token guardado correctamente", Toast.LENGTH_SHORT).show();
                     String token = response.body().getToken();
-                    getSharedPreferences(PREFS_NAME, MODE_PRIVATE)
-                            .edit()
+                    SharedPreferences prefs = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
+                    prefs.edit()
                             .putString("auth_token", token)
                             .apply();
 
-                    Intent intent = new Intent(RegisterActivity.this, LobbyActivity.class);
+                    // Decidir siguiente pantalla: filtros iniciales o lobby
+                    boolean filtersDone = prefs.getBoolean("initial_filters_done", false);
+                    Intent intent;
+                    if (!filtersDone) {
+                        intent = new Intent(RegisterActivity.this, InitialFiltersActivity.class);
+                    } else {
+                        intent = new Intent(RegisterActivity.this, LobbyActivity.class);
+                    }
                     intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
                     startActivity(intent);
                     finish();

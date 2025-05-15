@@ -42,7 +42,7 @@ public class NewAlertActivity extends AppCompatActivity {
         authToken  = getSharedPreferences(PREFS_NAME, MODE_PRIVATE)
                 .getString("auth_token", "");
 
-        createButton.setOnClickListener(v -> attemptCreateAlert());
+        createButton.setOnClickListener(view -> attemptCreateAlert());
     }
 
     private void attemptCreateAlert() {

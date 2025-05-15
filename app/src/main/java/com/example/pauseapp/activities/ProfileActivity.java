@@ -22,6 +22,7 @@ import com.example.pauseapp.model.UserResponse;
 import java.time.LocalDateTime;
 import java.util.Comparator;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -46,16 +47,16 @@ public class ProfileActivity extends MenuFunction {
         setupNavigation();
 
         // Bind views
-        stressBarCurrent = findViewById(R.id.stressBarActual);
-        stressIconCurrent = findViewById(R.id.actualStressIcon);
-        stressBarPrevious = findViewById(R.id.stressBarAnterior);
-        stressIconPrevious = findViewById(R.id.previousStressIcon);
-        stressButton = findViewById(R.id.stressButton);
-        holaNombre = findViewById(R.id.hola_nombre);
-        stressAnteriorText = findViewById(R.id.stressAnteriorText);
-        stressActualText = findViewById(R.id.stressActualText);
-        diasActualizar = findViewById(R.id.diasActualizar);
-        numActividades = findViewById(R.id.numActividades);
+        stressBarCurrent    = findViewById(R.id.stressBarActual);
+        stressIconCurrent   = findViewById(R.id.actualStressIcon);
+        stressBarPrevious   = findViewById(R.id.stressBarAnterior);
+        stressIconPrevious  = findViewById(R.id.previousStressIcon);
+        stressButton        = findViewById(R.id.stressButton);
+        holaNombre          = findViewById(R.id.hola_nombre);
+        stressAnteriorText  = findViewById(R.id.stressAnteriorText);
+        stressActualText    = findViewById(R.id.stressActualText);
+        diasActualizar      = findViewById(R.id.diasActualizar);
+        numActividades      = findViewById(R.id.numActividades);
 
         // Init service
         authApiService = RetrofitClient.getClient().create(AuthApiService.class);
@@ -71,7 +72,7 @@ public class ProfileActivity extends MenuFunction {
         }
 
         // Button to change stress level
-        stressButton.setOnClickListener(v ->
+        stressButton.setOnClickListener(view ->
                 startActivity(new Intent(ProfileActivity.this, TestActivity.class))
         );
 
@@ -82,7 +83,6 @@ public class ProfileActivity extends MenuFunction {
     @Override
     protected void onResume() {
         super.onResume();
-        // Reload data whenever returning
         String token = getSharedPreferences(PREFS_NAME, MODE_PRIVATE)
                 .getString(KEY_TOKEN, "");
         if (!token.isEmpty()) fetchUserData(token);
@@ -90,7 +90,7 @@ public class ProfileActivity extends MenuFunction {
 
     private void fetchUserData(String token) {
         authApiService.getUser("Bearer " + token)
-                .enqueue(new Callback<>() {
+                .enqueue(new Callback<UserResponse>() {
                     @Override
                     public void onResponse(Call<UserResponse> call, Response<UserResponse> response) {
                         if (response.isSuccessful() && response.body() != null) {
@@ -112,32 +112,49 @@ public class ProfileActivity extends MenuFunction {
     }
 
     private void applyUserData(UserResponse user) {
-        // Nombre, streak y actividades
         holaNombre.setText("Hola " + user.getUsername());
         diasActualizar.setText((user.getStreakDays() != null ? user.getStreakDays() : 0) + " DÍAS");
         numActividades.setText((user.getCompletedActivities() != null ? user.getCompletedActivities() : 0) + " ACTIVIDADES");
 
-        // COMPUTAR NIVELES POR FECHA
-        float initialLevel = 0f, currentLevel = 0f;
         List<StressLevelResponse> levels = user.getStressLevels();
+        float defaultLevel = 80f;
+        float previousLevel, currentLevel;
+
         if (levels != null && !levels.isEmpty()) {
-            // Ordeno por fecha (ISO-8601 sin zona)
-            levels.sort(Comparator.comparing(l ->
-                    LocalDateTime.parse(l.getDate())
-            ));
-            initialLevel = levels.get(0).getLevel();
+            // Orden cronológico
+            levels.sort(Comparator.comparing(l -> LocalDateTime.parse(l.getDate())));
+
+            // Nivel actual = último registro
             currentLevel = levels.get(levels.size() - 1).getLevel();
+
+            // Filtrar últimos 7 días
+            LocalDateTime oneWeekAgo = LocalDateTime.now().minusDays(7);
+            List<StressLevelResponse> lastWeek = levels.stream()
+                    .filter(l -> LocalDateTime.parse(l.getDate()).isAfter(oneWeekAgo))
+                    .collect(Collectors.toList());
+
+            // Nivel anterior = máximo de la semana
+            if (!lastWeek.isEmpty()) {
+                previousLevel = lastWeek.stream()
+                        .map(StressLevelResponse::getLevel)
+                        .max(Float::compare)
+                        .orElse(defaultLevel);
+            } else {
+                previousLevel = defaultLevel;
+            }
+        } else {
+            // Sin datos: ambos a default
+            previousLevel = currentLevel = defaultLevel;
         }
 
         // Mostrar texto
-        stressAnteriorText.setText("Nivel de estrés anterior: " + Math.round(initialLevel) + "%");
-        stressActualText .setText("Nivel de estrés actual: "  + Math.round(currentLevel) + "%");
+        stressAnteriorText.setText("Máximo estrés última semana: " + Math.round(previousLevel) + "%");
+        stressActualText .setText("Nivel de estrés actual: "   + Math.round(currentLevel) + "%");
 
-        // Actualizar progres bars e íconos
-        updateBar(stressBarPrevious, stressIconPrevious, Math.round(initialLevel));
+        // Actualizar progress bars e íconos
+        updateBar(stressBarPrevious, stressIconPrevious, Math.round(previousLevel));
         updateBar(stressBarCurrent,  stressIconCurrent,  Math.round(currentLevel));
     }
-
 
     private void updateBar(ProgressBar bar, ImageView icon, int level) {
         bar.setProgress(level);
