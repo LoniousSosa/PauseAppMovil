@@ -28,6 +28,7 @@ import com.example.pauseapp.api.AuthApiService;
 import com.example.pauseapp.api.RetrofitClient;
 import com.example.pauseapp.model.ActivityResponse;
 import com.example.pauseapp.otros.AlertWorker;
+import com.example.pauseapp.fragments.PremiumDialogFragment;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import java.util.ArrayList;
@@ -171,11 +172,24 @@ public class LobbyActivity extends MenuFunction {
                         .into(btn);
                 btn.setVisibility(View.VISIBLE);
                 btn.setOnClickListener(view -> {
-                    Intent intent = new Intent(LobbyActivity.this,
-                            PresentationActivity.class);
-                    intent.putExtra("ACTIVITY_ID", act.getId());
-                    startActivity(intent);
+                    // 1) Leemos si el usuario está suscrito
+                    SharedPreferences prefs = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
+                    boolean userSubscribed = prefs.getBoolean("subscription", false);
+
+                    // 2) Si es premium y no suscrito, mostramos el diálogo
+                    if (Boolean.TRUE.equals(act.getIsPremium()) && !userSubscribed) {
+                        PremiumDialogFragment
+                                .newInstance(act.getThumbnailUrl())
+                                .show(getSupportFragmentManager(), "premiumDlg");
+                    } else {
+                        // 3) En caso contrario, navegamos a PresentationActivity
+                        Intent intent = new Intent(LobbyActivity.this,
+                                PresentationActivity.class);
+                        intent.putExtra("ACTIVITY_ID", act.getId());
+                        startActivity(intent);
+                    }
                 });
+
             } else {
                 btn.setVisibility(View.GONE);
             }

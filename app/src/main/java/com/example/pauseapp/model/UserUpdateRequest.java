@@ -7,7 +7,7 @@ public class UserUpdateRequest {
     private String name;
     private String password;
     private String email;
-    private Integer subscription;
+    private Boolean subscription;
     private Integer streakDays;
     private Integer completedActivities;
     private Integer alertInterval;
@@ -38,11 +38,11 @@ public class UserUpdateRequest {
         this.email = email;
     }
 
-    public Integer getSubscription() {
+    public Boolean getSubscription() {
         return subscription;
     }
 
-    public void setSubscription(Integer subscription) {
+    public void setSubscription(Boolean subscription) {
         this.subscription = subscription;
     }
 

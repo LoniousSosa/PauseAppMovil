@@ -128,4 +128,4 @@
             app:itemIconTint="@color/white"
             app:itemTextColor="@color/white"
             android:background="@color/general_background"/>
-    </androidx.drawerlayout.widget.DrawerLayout>
+</androidx.drawerlayout.widget.DrawerLayout>

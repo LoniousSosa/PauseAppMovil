@@ -30,6 +30,10 @@ import retrofit2.Response;
 public class RegisterActivity extends AppCompatActivity {
 
     private static final String PREFS_NAME = "PauseAppPrefs";
+    private static final String KEY_USER_NAME = "user_name";
+    private static final String KEY_USER_ID   = "user_id";
+
+    private static final String KEY_SUBSCRIPTION = "subscription";
 
     EditText userNameEdit, emailEdit, passwordEditText, repeatEdit;
     ImageView togglePasswordVisibility, toggleRepeatVisibility;

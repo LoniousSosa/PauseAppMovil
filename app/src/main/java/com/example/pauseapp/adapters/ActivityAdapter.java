@@ -2,6 +2,7 @@ package com.example.pauseapp.adapters;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,11 +10,13 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
+import androidx.fragment.app.FragmentActivity;
 import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.example.pauseapp.R;
 import com.example.pauseapp.activities.PresentationActivity;
 import com.example.pauseapp.model.ActivityResponse;
+import com.example.pauseapp.fragments.PremiumDialogFragment;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -51,11 +54,26 @@ public class ActivityAdapter extends RecyclerView.Adapter<ActivityAdapter.ViewHo
             intent.putExtra("ACTIVITY_ID", activity.getId());
             ctx.startActivity(intent);
         });
+
         holder.seeProfileButton.setOnClickListener(view -> {
             Context ctx = view.getContext();
-            Intent intent = new Intent(ctx, PresentationActivity.class);
-            intent.putExtra("ACTIVITY_ID", activity.getId());
-            ctx.startActivity(intent);
+            SharedPreferences prefs = ctx.getSharedPreferences("PauseAppPrefs", Context.MODE_PRIVATE);
+            boolean userSubscribed = prefs.getBoolean("subscription", false);
+            if (Boolean.TRUE.equals(activity.getIsPremium()) && !userSubscribed) {
+                // Mostrar diálogo premium
+                ((FragmentActivity) ctx)
+                        .getSupportFragmentManager()
+                        .beginTransaction()
+                        .add(
+                                PremiumDialogFragment.newInstance(activity.getThumbnailUrl()),
+                                "premiumDlg"
+                        )
+                        .commitAllowingStateLoss();
+            } else {
+                Intent intent = new Intent(ctx, PresentationActivity.class);
+                intent.putExtra("ACTIVITY_ID", activity.getId());
+                ctx.startActivity(intent);
+            }
         });
     }
 

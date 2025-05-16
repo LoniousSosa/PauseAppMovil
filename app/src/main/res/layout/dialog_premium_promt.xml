@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <!-- 1) Fondo: imagen de la actividad -->
+    <ImageView
+        android:id="@+id/ivDialogBg"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scaleType="centerCrop"/>
+
+    <!-- 2) Overlay semitransparente para atenuar el blur -->
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#80000000"/>
+
+    <!-- 3) Card con el contenido -->
+    <androidx.cardview.widget.CardView
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        app:cardCornerRadius="16dp"
+        app:cardElevation="8dp"
+        android:padding="16dp"
+        app:cardBackgroundColor="@color/imagebutton_background"
+        android:background="@color/white">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <!-- Botón cerrar -->
+            <ImageButton
+                android:id="@+id/btnCloseDialog"
+                android:layout_width="32dp"
+                android:layout_height="32dp"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:src="@drawable/ic_close"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentTop="true"/>
+
+            <!-- Texto -->
+            <TextView
+                android:layout_below="@id/btnCloseDialog"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="16dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Contenido para usuarios\ncon suscripción"
+                android:textAlignment="center"
+                android:textSize="18sp"/>
+
+            <!-- Botón comprar -->
+            <Button
+                android:id="@+id/btnBuySubscription"
+                android:layout_below="@id/btnCloseDialog"
+                android:layout_marginTop="72dp"
+                android:paddingHorizontal="20dp"
+                android:layout_marginBottom="30dp"
+                android:layout_centerHorizontal="true"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Comprar suscripción"
+                style="@style/ButtonOne"/>
+        </RelativeLayout>
+    </androidx.cardview.widget.CardView>
+</FrameLayout>

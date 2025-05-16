@@ -25,6 +25,8 @@ public class LoginActivity extends AppCompatActivity {
     private static final String KEY_TOKEN     = "auth_token";
     private static final String KEY_USER_ID   = "user_id";
     private static final String KEY_USER_NAME = "user_name";
+    private static final String KEY_SUBSCRIPTION = "subscription";
+
 
     private EditText mailEditText, passwordEditText;
     private AuthApiService authApiService;
@@ -54,10 +56,10 @@ public class LoginActivity extends AppCompatActivity {
         }
 
         authApiService.loginUser(new LoginRequest(email, password))
-                .enqueue(new Callback<LoginResponse>() {
+                .enqueue(new Callback<>() {
                     @Override
                     public void onResponse(Call<LoginResponse> call, Response<LoginResponse> resp) {
-                        if (!resp.isSuccessful() || resp.body()==null) {
+                        if (!resp.isSuccessful() || resp.body() == null) {
                             Toast.makeText(LoginActivity.this,
                                     "Credenciales incorrectas", Toast.LENGTH_SHORT).show();
                             return;
@@ -77,6 +79,8 @@ public class LoginActivity extends AppCompatActivity {
                                             prefs.edit()
                                                     .putLong(KEY_USER_ID, u.getId())
                                                     .putString(KEY_USER_NAME, u.getUsername())
+                                                        .putBoolean(KEY_SUBSCRIPTION, u.getIsSubscribed() != null
+                                                                && u.getIsSubscribed())
                                                     .apply();
 
                                             boolean filtersDone = getSharedPreferences("PauseAppPrefs", MODE_PRIVATE)
@@ -85,12 +89,13 @@ public class LoginActivity extends AppCompatActivity {
 
                                             Intent next;
                                             /**
-                                            if (!filtersDone) {
-                                                next = new Intent(LoginActivity.this, InitialFiltersActivity.class);
-                                            } else {
-                                                next = new Intent(LoginActivity.this, LobbyActivity.class);
-                                            }**/
-                                            next = new Intent(LoginActivity.this,LobbyActivity.class);
+                                             if (!filtersDone) {
+                                             next = new Intent(LoginActivity.this, InitialFiltersActivity.class);
+                                             } else {
+                                             next = new Intent(LoginActivity.this, LobbyActivity.class);
+                                             }
+                                             **/
+                                            next = new Intent(LoginActivity.this, LobbyActivity.class);
                                             startActivity(next);
                                             finish();
 

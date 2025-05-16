@@ -32,6 +32,14 @@ public class User {
         this.name = name;
     }
 
+    public Boolean getSubscription() {
+        return subscription;
+    }
+
+    public void setSubscription(Boolean subscription) {
+        this.subscription = subscription;
+    }
+
     public String getUsername() { return name; }
     public String getEmail() { return email; }
     public String getPassword() { return password; }
