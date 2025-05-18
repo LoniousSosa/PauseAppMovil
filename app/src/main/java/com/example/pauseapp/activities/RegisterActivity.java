@@ -216,6 +216,8 @@ public class RegisterActivity extends AppCompatActivity {
 
             togglePasswordVisibility.setImageResource(
                     showing ? R.drawable.mostrar_contra : R.drawable.no_mostrar_contra_crop);
+            toggleRepeatVisibility.setImageResource(
+                    showing ? R.drawable.mostrar_contra : R.drawable.no_mostrar_contra_crop);
         };
     }
 }

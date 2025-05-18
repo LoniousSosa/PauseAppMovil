@@ -25,8 +25,6 @@ public interface AuthApiService {
             @Header("Authorization") String token
     );
 
-
-
     @GET("user/me")
     Call<UserResponse> getUser(@Header("Authorization") String token);
 
@@ -74,6 +72,13 @@ public interface AuthApiService {
     @GET("activity/types")
     Call<List<ActivityTypeResponse>> getActivityTypes(@Header("Authorization") String token);
 
+
+    @GET("user/{userId}/complete-activity/{activityId}")
+    Call<ActivityRecordResponse> completeActivity(
+            @Path("userId") long userId,
+            @Path("activityId") long activityId,
+            @Header("Authorization") String token
+    );
 
     // —— Alertas ———————————————————————————————————————————————
 
@@ -157,9 +162,16 @@ public interface AuthApiService {
 
     // —— ActivityRecord ——————————————————————————————————————————
 
-    @POST("user/{userId}/record")
+    @POST("user/{id}/record")
     Call<ActivityRecordResponse> createUserActivityRecord(
-            @Path("userId") Long userId,
+            @Path("id") Long userId,
+            @Body ActivityRecordCreateRequest request,
+            @Header("Authorization") String token
+    );
+
+    @PATCH("user/record/{id}")
+    Call<ActivityRecordResponse> updateUserActivityRecord(
+            @Path("id") Long recordId,
             @Body ActivityRecordCreateRequest request,
             @Header("Authorization") String token
     );
@@ -168,5 +180,12 @@ public interface AuthApiService {
     Call<List<ActivityRecordResponse>> getUserActivityRecords(
             @Path("userId") Long userId,
             @Header("Authorization") String token
+    );
+
+    //Media
+    @GET("/media/{id}")
+    Call<MediaResponse> getMediaById(
+            @Path("id") Long mediaId,
+            @Header("Authorization") String bearerToken
     );
 }

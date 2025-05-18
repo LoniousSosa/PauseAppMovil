@@ -61,7 +61,6 @@ public class ProfileActivity extends MenuFunction {
         // Init service
         authApiService = RetrofitClient.getClient().create(AuthApiService.class);
 
-        // Validate token
         String token = getSharedPreferences(PREFS_NAME, MODE_PRIVATE)
                 .getString(KEY_TOKEN, "");
         if (token.isEmpty()) {
@@ -90,7 +89,7 @@ public class ProfileActivity extends MenuFunction {
 
     private void fetchUserData(String token) {
         authApiService.getUser("Bearer " + token)
-                .enqueue(new Callback<UserResponse>() {
+                .enqueue(new Callback<>() {
                     @Override
                     public void onResponse(Call<UserResponse> call, Response<UserResponse> response) {
                         if (response.isSuccessful() && response.body() != null) {

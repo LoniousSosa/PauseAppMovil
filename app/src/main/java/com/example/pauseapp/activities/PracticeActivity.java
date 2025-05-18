@@ -5,6 +5,7 @@ import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.CountDownTimer;
+import android.view.View;
 import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
@@ -35,14 +36,16 @@ public class PracticeActivity extends MenuFunction {
     private static final String PREFS_NAME = "PauseAppPrefs";
     private TextView timerText;
     private Button startButton, posponeButton;
+    private FrameLayout mediaContainer;
+    private VideoView videoView;
     private CountDownTimer countDownTimer;
     private long timeLeftInMillis = 60000;
-    private FrameLayout mediaContainer;
 
     private AuthApiService apiService;
     private String userToken;
     private long activityId;
     private Long userId;
+    private ActivityResponse currentActivity;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,13 +53,11 @@ public class PracticeActivity extends MenuFunction {
         setContentView(R.layout.activity_practice);
         setupNavigation();
 
-        // Bind views
-        timerText = findViewById(R.id.timerText);
-        posponeButton = findViewById(R.id.posponeButton);
+        timerText      = findViewById(R.id.timerText);
+        posponeButton  = findViewById(R.id.posponeButton);
         mediaContainer = findViewById(R.id.mediaContainer);
-        startButton = findViewById(R.id.startButton);
+        startButton    = findViewById(R.id.startButton);
 
-        // Get token
         SharedPreferences prefs = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
         userToken = prefs.getString("auth_token", "");
         if (userToken == null || userToken.isEmpty()) {
@@ -65,13 +66,9 @@ public class PracticeActivity extends MenuFunction {
             return;
         }
 
-        // Initialize API
         apiService = RetrofitClient.getClient().create(AuthApiService.class);
-
-        // Get current user to obtain userId
         fetchCurrentUser();
 
-        // Get activityId
         activityId = getIntent().getLongExtra("ACTIVITY_ID", -1L);
         if (activityId < 0) {
             Toast.makeText(this, "Actividad no válida", Toast.LENGTH_SHORT).show();
@@ -79,154 +76,197 @@ public class PracticeActivity extends MenuFunction {
             return;
         }
 
-        // Load media for the activity
-        apiService.getActivityById(activityId, "Bearer " + userToken)
-                .enqueue(new Callback<ActivityResponse>() {
-                    @Override
-                    public void onResponse(Call<ActivityResponse> call, Response<ActivityResponse> resp) {
-                        if (resp.isSuccessful() && resp.body() != null) {
-                            displayMedia(resp.body());
-                        } else {
-                            Toast.makeText(PracticeActivity.this,
-                                    "Error al cargar actividad", Toast.LENGTH_SHORT).show();
-                        }
-                    }
+        loadActivityAndMedia();
 
-                    @Override
-                    public void onFailure(Call<ActivityResponse> call, Throwable t) {
-                        Toast.makeText(PracticeActivity.this,
-                                "Fallo de red: " + t.getMessage(), Toast.LENGTH_SHORT).show();
-                    }
-                });
-
-        // Set listeners
-        startButton.setOnClickListener(view -> {
-            // Start timer when user presses start
+        startButton.setOnClickListener(v -> {
+            startButton.setVisibility(View.GONE);
+            if (videoView != null) videoView.start();
             startTimer();
         });
-        posponeButton.setOnClickListener(view -> {
-            if (countDownTimer != null) {
-                countDownTimer.cancel();
+
+        posponeButton.setOnClickListener(v -> {
+            if (countDownTimer != null) countDownTimer.cancel();
+            if (videoView != null && videoView.isPlaying()) {
+                videoView.pause();
             }
+            startButton.setVisibility(View.VISIBLE);
         });
     }
 
     private void fetchCurrentUser() {
         apiService.getUser("Bearer " + userToken)
-                .enqueue(new Callback<>() {
-                    @Override
-                    public void onResponse(Call<UserResponse> call, Response<UserResponse> response) {
-                        if (response.isSuccessful() && response.body() != null) {
-                            userId = response.body().getId();
+                .enqueue(new Callback<UserResponse>() {
+                    @Override public void onResponse(Call<UserResponse> c, Response<UserResponse> r) {
+                        if (r.isSuccessful() && r.body() != null) {
+                            userId = r.body().getId();
                         }
                     }
+                    @Override public void onFailure(Call<UserResponse> c, Throwable t) { }
+                });
+    }
 
-                    @Override
-                    public void onFailure(Call<UserResponse> call, Throwable t) {
-                        // optional: handle error
+    private void loadActivityAndMedia() {
+        apiService.getActivityById(activityId, "Bearer " + userToken)
+                .enqueue(new Callback<ActivityResponse>() {
+                    @Override public void onResponse(Call<ActivityResponse> c, Response<ActivityResponse> r) {
+                        if (!r.isSuccessful() || r.body() == null) {
+                            Toast.makeText(PracticeActivity.this, "Error al cargar actividad", Toast.LENGTH_SHORT).show();
+                            return;
+                        }
+                        currentActivity = r.body();
+                        Long mediaId = currentActivity.getMedia() != null
+                                ? currentActivity.getMedia().getId()
+                                : null;
+                        if (mediaId != null) {
+                            apiService.getMediaById(mediaId, "Bearer " + userToken)
+                                    .enqueue(new Callback<MediaResponse>() {
+                                        @Override public void onResponse(Call<MediaResponse> c2, Response<MediaResponse> r2) {
+                                            String url = (r2.isSuccessful() && r2.body() != null)
+                                                    ? r2.body().getUrl()
+                                                    : null;
+                                            displayMedia(url);
+                                        }
+                                        @Override public void onFailure(Call<MediaResponse> c2, Throwable t) {
+                                            displayMedia(null);
+                                        }
+                                    });
+                        } else {
+                            displayMedia(null);
+                        }
+                    }
+                    @Override public void onFailure(Call<ActivityResponse> c, Throwable t) {
+                        Toast.makeText(PracticeActivity.this, "Fallo de red: " + t.getMessage(), Toast.LENGTH_SHORT).show();
                     }
                 });
     }
 
-    private void displayMedia(ActivityResponse activity) {
+    private void displayMedia(String mediaUrl) {
         mediaContainer.removeAllViews();
-        MediaResponse media = activity.getMedia();
-        if (media != null && media.getUrl().endsWith(".mp4")) {
-            VideoView videoView = new VideoView(this);
-            videoView.setVideoURI(Uri.parse(media.getUrl()));
-            mediaContainer.addView(videoView,
-                    FrameLayout.LayoutParams.MATCH_PARENT,
-                    FrameLayout.LayoutParams.MATCH_PARENT);
-            startButton.setVisibility(Button.GONE);
+        videoView = new VideoView(this);
+        mediaContainer.addView(videoView, new FrameLayout.LayoutParams(
+                FrameLayout.LayoutParams.MATCH_PARENT,
+                FrameLayout.LayoutParams.MATCH_PARENT
+        ));
 
-            videoView.setOnPreparedListener(mp -> {
-                timeLeftInMillis = mp.getDuration();
-                long seconds = timeLeftInMillis / 1000;
-                updateTimerText();
-                videoView.start();
-                startTimer();
-            });
-        } else {
-            ImageView imageView = new ImageView(this);
-            imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
-            mediaContainer.addView(imageView,
-                    FrameLayout.LayoutParams.MATCH_PARENT,
-                    FrameLayout.LayoutParams.MATCH_PARENT);
-            String thumb = activity.getThumbnailUrl();
-            Glide.with(this)
-                    .load(thumb)
-                    .placeholder(R.drawable.actividad4_2)
-                    .into(imageView);
-            startButton.setVisibility(Button.VISIBLE);
-            timeLeftInMillis = TimeUnit.MINUTES.toMillis(1);
+        startButton.setVisibility(View.VISIBLE);
+        posponeButton.setVisibility(View.VISIBLE);
+
+        videoView.setOnErrorListener((mp, what, extra) -> {
+            showThumbnail();
+            return true;
+        });
+
+        videoView.setOnPreparedListener(mp -> {
+            timeLeftInMillis = mp.getDuration();
             updateTimerText();
+        });
+
+        if (mediaUrl != null && mediaUrl.startsWith("http")) {
+            videoView.setVideoURI(Uri.parse(mediaUrl));
+        } else if (mediaUrl != null && mediaUrl.startsWith("/")) {
+            String filename = mediaUrl.substring(mediaUrl.lastIndexOf('/') + 1,
+                    mediaUrl.lastIndexOf('.'));
+            int resId = getResources().getIdentifier(filename, "raw", getPackageName());
+            if (resId != 0) {
+                Uri rawUri = Uri.parse("android.resource://" + getPackageName() + "/" + resId);
+                videoView.setVideoURI(rawUri);
+            } else {
+                showThumbnail();
+            }
+        } else {
+            showThumbnail();
         }
+    }
+
+    private void showThumbnail() {
+        mediaContainer.removeAllViews();
+        ImageView iv = new ImageView(this);
+        iv.setScaleType(ImageView.ScaleType.CENTER_CROP);
+        mediaContainer.addView(iv,
+                FrameLayout.LayoutParams.MATCH_PARENT,
+                FrameLayout.LayoutParams.MATCH_PARENT
+        );
+        Glide.with(this)
+                .load(currentActivity.getThumbnailUrl())
+                .placeholder(R.drawable.actividad4_2)
+                .into(iv);
+
+        startButton.setVisibility(View.VISIBLE);
+        posponeButton.setVisibility(View.GONE);
+        timeLeftInMillis = TimeUnit.MINUTES.toMillis(1);
+        updateTimerText();
     }
 
     private void startTimer() {
         countDownTimer = new CountDownTimer(timeLeftInMillis, 1000) {
-            @Override
-            public void onTick(long millisUntilFinished) {
-                timeLeftInMillis = millisUntilFinished;
+            @Override public void onTick(long ms) {
+                timeLeftInMillis = ms;
                 updateTimerText();
             }
-            @Override
-            public void onFinish() {
+            @Override public void onFinish() {
                 timerText.setText("00:00");
-                if (userId != null) {
-                    recordActivityCompletion();
-                }
+                createThenCompleteAndExit();
             }
         }.start();
     }
 
-    private void recordActivityCompletion() {
-        // Format current timestamp in ISO 8601
-        String nowIso = OffsetDateTime
-                .now(ZoneOffset.UTC)
+    private void createThenCompleteAndExit() {
+        // timestamp ISO UTC
+        String nowIso = OffsetDateTime.now(ZoneOffset.UTC)
                 .format(DateTimeFormatter.ISO_OFFSET_DATE_TIME);
 
-        ActivityRecordCreateRequest req = new ActivityRecordCreateRequest(
-                activityId,
-                nowIso,
-                true
-        );
+        // 1) Intentar crear registro (si ya existe, seguiremos de todos modos)
+        ActivityRecordCreateRequest createReq =
+                new ActivityRecordCreateRequest(activityId, nowIso, false);
+        apiService.createUserActivityRecord(userId, createReq, "Bearer " + userToken)
+                .enqueue(new Callback<ActivityRecordResponse>() {
+                    @Override public void onResponse(Call<ActivityRecordResponse> c1, Response<ActivityRecordResponse> r1) {
+                        // pase lo que pase, completamos
+                        completeAndGoLobby();
+                    }
+                    @Override public void onFailure(Call<ActivityRecordResponse> c1, Throwable t) {
+                        // Si fallo 409 (ya existe), seguimos; sino, mostramos error
+                        if (t.getMessage().contains("409")) {
+                            completeAndGoLobby();
+                        } else {
+                            Toast.makeText(PracticeActivity.this,
+                                    "Error creando registro: " + t.getMessage(),
+                                    Toast.LENGTH_LONG).show();
+                        }
+                    }
+                });
+    }
 
-        apiService.createUserActivityRecord(
-                userId,
-                req,
-                "Bearer " + userToken
-        ).enqueue(new Callback<ActivityRecordResponse>() {
-            @Override
-            public void onResponse(Call<ActivityRecordResponse> call, Response<ActivityRecordResponse> resp) {
-                if (resp.isSuccessful()) {
-                    Toast.makeText(PracticeActivity.this,
-                            "Registro guardado correctamente",
-                            Toast.LENGTH_SHORT).show();
-                } else {
-                    Toast.makeText(PracticeActivity.this,
-                            "Error guardando registro",
-                            Toast.LENGTH_SHORT).show();
-                }
-            }
-            @Override
-            public void onFailure(Call<ActivityRecordResponse> call, Throwable t) {
-                Toast.makeText(PracticeActivity.this,
-                        "Error de conexión: " + t.getMessage(),
-                        Toast.LENGTH_SHORT).show();
-            }
-        });
+    private void completeAndGoLobby() {
+        apiService.completeActivity(userId, activityId, "Bearer " + userToken)
+                .enqueue(new Callback<ActivityRecordResponse>() {
+                    @Override public void onResponse(Call<ActivityRecordResponse> c2, Response<ActivityRecordResponse> r2) {
+                        if (r2.isSuccessful()) {
+                            Intent i = new Intent(PracticeActivity.this, LobbyActivity.class);
+                            i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+                            startActivity(i);
+                            finish();
+                        } else {
+                            Toast.makeText(PracticeActivity.this,
+                                    "Error completando actividad: " + r2.code(),
+                                    Toast.LENGTH_LONG).show();
+                        }
+                    }
+                    @Override public void onFailure(Call<ActivityRecordResponse> c2, Throwable t) {
+                        Toast.makeText(PracticeActivity.this,
+                                "Error de red: " + t.getMessage(),
+                                Toast.LENGTH_SHORT).show();
+                    }
+                });
     }
 
     private void updateTimerText() {
-        int minutes = (int) (timeLeftInMillis / 1000) / 60;
-        int seconds = (int) (timeLeftInMillis / 1000) % 60;
-        String timeFormatted = String.format("%02d:%02d", minutes, seconds);
-        timerText.setText(timeFormatted);
+        int m = (int)(timeLeftInMillis / 1000) / 60;
+        int s = (int)(timeLeftInMillis / 1000) % 60;
+        timerText.setText(String.format("%02d:%02d", m, s));
     }
 
     private void goToLogin() {
-        Intent intent = new Intent(this, LoginActivity.class);
-        startActivity(intent);
+        startActivity(new Intent(this, LoginActivity.class));
     }
 }

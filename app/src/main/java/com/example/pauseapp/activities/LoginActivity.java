@@ -3,7 +3,9 @@ package com.example.pauseapp.activities;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.text.InputType;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -40,6 +42,13 @@ public class LoginActivity extends AppCompatActivity {
         passwordEditText = findViewById(R.id.passwordEdit);
         authApiService   = RetrofitClient.getClient().create(AuthApiService.class);
 
+        ImageView togglePasswordVisibility = findViewById(R.id.togglePasswordVisibility);
+        EditText passwordEditText = findViewById(R.id.passwordEdit);
+
+        togglePasswordVisibility.setOnClickListener(v -> {
+            toggleListener(togglePasswordVisibility, passwordEditText);
+        });
+
         findViewById(R.id.logToLobby).setOnClickListener(view -> authenticateUser());
         findViewById(R.id.registerSuggestion).setOnClickListener(view ->
                 startActivity(new Intent(this, RegisterActivity.class))
@@ -66,7 +75,6 @@ public class LoginActivity extends AppCompatActivity {
                         }
 
                         String token = resp.body().getToken();
-                        // 1) Guardamos sólo el token
                         SharedPreferences prefs = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
                         prefs.edit().putString(KEY_TOKEN, token).apply();
 
@@ -88,13 +96,16 @@ public class LoginActivity extends AppCompatActivity {
 
 
                                             Intent next;
+
                                             /**
-                                             if (!filtersDone) {
-                                             next = new Intent(LoginActivity.this, InitialFiltersActivity.class);
-                                             } else {
-                                             next = new Intent(LoginActivity.this, LobbyActivity.class);
-                                             }
-                                             **/
+                                             * Si los filtros no funciona, comentar el if-else
+                                             */
+
+                                            if (!filtersDone) {
+                                                next = new Intent(LoginActivity.this, InitialFiltersActivity.class);
+                                            } else {
+                                                next = new Intent(LoginActivity.this, LobbyActivity.class);
+                                            }
                                             next = new Intent(LoginActivity.this, LobbyActivity.class);
                                             startActivity(next);
                                             finish();
@@ -119,5 +130,20 @@ public class LoginActivity extends AppCompatActivity {
                                 "Error de conexión", Toast.LENGTH_SHORT).show();
                     }
                 });
+    }
+
+    private void toggleListener(ImageView togglePasswordVisibility, EditText passwordEditText){
+        boolean isVisible = (passwordEditText.getInputType()
+                == (InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD));
+        if (isVisible) {
+            passwordEditText.setInputType(
+                    InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
+            togglePasswordVisibility.setImageResource(R.drawable.mostrar_contra);
+        } else {
+            passwordEditText.setInputType(
+                    InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD);
+            togglePasswordVisibility.setImageResource(R.drawable.no_mostrar_contra_crop);
+        }
+        passwordEditText.setSelection(passwordEditText.length());
     }
 }
