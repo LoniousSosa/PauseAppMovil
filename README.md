@@ -4,4 +4,4 @@ API Rest:
 https://github.com/VictorMerinoITCBCN/PAUSEAPP-API/tree/main
 
 Aplicación web:
-https://github.com/EnricUlloa/PROJ2_AppWeb
+https://github.com/EnricUlloa/PROJ2_AppWeb/tree/victor_merino
